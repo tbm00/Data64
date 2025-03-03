@@ -1,0 +1,10 @@
+# Reset64 v0.0.0-beta by @tbm00
+# https://github.com/tbm00/Reset64
+
+enabled: true
+
+lang:
+  prefix: "&8[&fR64&8] &7"
+
+feature:
+  enabled: true

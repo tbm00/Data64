@@ -4,14 +4,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.ChatColor;
+
+import net.md_5.bungee.api.chat.TextComponent;
 
 import dev.tbm00.spigot.reset64.command.ResetCommand;
 import dev.tbm00.spigot.reset64.listener.PlayerConnection;
 import dev.tbm00.spigot.reset64.process.DSProcess;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class Reset64 extends JavaPlugin {
     private ConfigHandler configHandler;

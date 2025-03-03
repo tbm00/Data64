@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
@@ -48,6 +49,7 @@ public class ResetProcess {
 
         if (player.hasPermission("mc.r64.processed")) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by PROCESSED status!");
+            sendNotif(player);
             return false;
         }
 
@@ -70,6 +72,7 @@ public class ResetProcess {
         }
         
         javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " starting..!");
+        sendNotif(player);
         return true;
     }
 
@@ -348,6 +351,24 @@ public class ResetProcess {
         }
         
         return true;
+    }
+
+    /**
+     * Sends target a pre-defined notification later.
+     * 
+     * @param player the player to message
+     */
+    private void sendNotif(Player player) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (player!=null) {
+                    javaPlugin.sendMessage(player, "&l&bHey! &rIn our latest update, we overhauled our economy to be significantly more competitive and player-driven. \n" +
+                        "After a lot of thought, we decided to deflate everyone's pocket balance, bank balance, and rank, as well as completely remove the AdminShop and nerf job income. Now when you do /shop, it will pull up a category GUI for you to find other players' shops to buy from/sell to. With these changes, we suspect new and old shop owners will be the richest! \n" +
+                        "We've also re-added /coinflip and /bounty, as well as started rebuilding the /market in a new location -- come get a plot!");
+                }
+            }
+        }.runTaskLater(javaPlugin, 300);
     }
 
     /**

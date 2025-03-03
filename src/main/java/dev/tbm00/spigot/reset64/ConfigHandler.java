@@ -6,7 +6,8 @@ import org.bukkit.ChatColor;
 public class ConfigHandler {
     private final Reset64 javaPlugin;
     private String chatPrefix;
-    private boolean featureEnabled = false;
+    private boolean joinResetEnabled = false;
+    private boolean dsResetEnabled = false;
 
     /**
      * Constructs a ConfigHandler instance.
@@ -18,10 +19,10 @@ public class ConfigHandler {
         this.javaPlugin = javaPlugin;
         try {
             loadLanguageSection();
-            loadFeatureSection();
+            loadResetOnJoinSec();
+            loadDSResetSec();
         } catch (Exception e) {
-            javaPlugin.log(ChatColor.RED, "Caught exception loading config: ");
-            javaPlugin.getLogger().warning(e.getMessage());
+            javaPlugin.log(ChatColor.RED, "Caught exception loading config: " + e.getMessage());
         }
     }
 
@@ -35,19 +36,32 @@ public class ConfigHandler {
     }
 
     /**
-     * Loads the "feature" section of the configuration.
+     * Loads the "resetOnJoin" section of the configuration.
      */
-    private void loadFeatureSection() {
-        ConfigurationSection section = javaPlugin.getConfig().getConfigurationSection("feature");
+    private void loadResetOnJoinSec() {
+        ConfigurationSection section = javaPlugin.getConfig().getConfigurationSection("resetOnJoin");
         if (section!=null)
-            featureEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
+            joinResetEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
+    }
+
+    /**
+     * Loads the "displayShopReset" section of the configuration.
+     */
+    private void loadDSResetSec() {
+        ConfigurationSection section = javaPlugin.getConfig().getConfigurationSection("displayShopReset");
+        if (section!=null)
+            dsResetEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
     }
 
     public String getChatPrefix() {
         return chatPrefix;
     }
 
-    public boolean isFeatureEnabled() {
-        return featureEnabled;
+    public boolean isJoinResetEnabled() {
+        return joinResetEnabled;
+    }
+
+    public boolean isDSResetEnabled() {
+        return dsResetEnabled;
     }
 }

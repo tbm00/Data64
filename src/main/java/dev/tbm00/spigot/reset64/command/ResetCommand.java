@@ -13,14 +13,15 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
-import dev.tbm00.spigot.reset64.Reset64;
-import dev.tbm00.spigot.reset64.ConfigHandler;
 import net.md_5.bungee.api.chat.TextComponent;
+
+import dev.tbm00.spigot.reset64.Reset64;
+import dev.tbm00.spigot.reset64.process.ResetProcess;
+import dev.tbm00.spigot.reset64.ConfigHandler;
 
 public class ResetCommand implements TabExecutor {
     private final Reset64 javaPlugin;
     private final ConfigHandler configHandler;
-    private final String[] subCommands = new String[]{"sub"};
 
     public ResetCommand(Reset64 javaPlugin, ConfigHandler configHandler) {
         this.javaPlugin = javaPlugin;
@@ -34,54 +35,36 @@ public class ResetCommand implements TabExecutor {
      * @param consoleCommand the command being executed
      * @param label the label used for the command
      * @param args the arguments passed to the command
-     * @return true if the command was handled successfully, false otherwise
+     * @return {@code true} if the command was handled successfully, {@code false} otherwise
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 0) return handleBaseCommand(sender);
-
-        String subCommand = args[0].toLowerCase();
-        switch (subCommand) {
-            case "sub":
-                return handleSubCommand(sender, args);
-            default:
-                sendMessage(sender, ChatColor.RED + "Unknown subcommand!");
-                return false;
-        }
-    }
-
-    /**
-     * Handles the base command for __.
-     * 
-     * @param sender the command sender
-     * @param args the arguments passed to the command
-     * @return true if command was processed successfully, false otherwise
-     */
-    private boolean handleBaseCommand(CommandSender sender) {
-        if (hasPermission(sender, "reset64.cmd.base")) {
+        if (!hasPermission(sender, "reset64.cmd")) {
             sendMessage(sender, ChatColor.RED + "No permission!");
             return true;
         }
 
-        // do something
+        if (args.length == 0) return false;
+
+        Player target = getPlayer(args[0]);
+        if (target == null) {
+            sendMessage(sender, ChatColor.RED + "Could not find target player!");
+            return true;
+        } 
+        
+        handleResetCmd(sender, target);
         return true;
+
     }
 
     /**
-     * Handles the sub command for __.
+     * Handles the reset command.
      * 
      * @param sender the command sender
-     * @param args the arguments passed to the command
-     * @return true if command was processed successfully, false otherwise
+     * @param player the player passed to the command
      */
-    private boolean handleSubCommand(CommandSender sender, String[] args) {
-        if (hasPermission(sender, "reset64.cmd.sub")) {
-            sendMessage(sender, ChatColor.RED + "No permission!");
-            return true;
-        }
-
-        // do something
-        return true;
+    private void handleResetCmd(CommandSender sender, Player player) {
+        new ResetProcess(javaPlugin, sender, player);
     }
     
     /**
@@ -99,7 +82,7 @@ public class ResetCommand implements TabExecutor {
      * 
      * @param sender the command sender
      * @param perm the permission string
-     * @return true if the sender has the permission, false otherwise
+     * @return {@code true} if the sender has the permission, {@code false} otherwise
      */
     private boolean hasPermission(CommandSender sender, String perm) {
         return sender.hasPermission(perm) || sender instanceof ConsoleCommandSender;
@@ -119,13 +102,7 @@ public class ResetCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();
-        if (args.length == 1) {
-            list.clear();
-            for (String n : subCommands) {
-                if (n!=null && n.startsWith(args[0])) 
-                    list.add(n);
-            }
-        } else if (args.length == 2) {
+        if (hasPermission(sender, "reset64.cmd") && args.length == 1) {
             Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
         }
         return list;

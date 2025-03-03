@@ -3,10 +3,13 @@ package dev.tbm00.spigot.reset64;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 
 import dev.tbm00.spigot.reset64.command.ResetCommand;
 import dev.tbm00.spigot.reset64.listener.PlayerConnection;
+import dev.tbm00.spigot.reset64.process.DSProcess;
 
 public class Reset64 extends JavaPlugin {
     private ConfigHandler configHandler;
@@ -27,14 +30,18 @@ public class Reset64 extends JavaPlugin {
                 
             setupHooks();
 
-            if (configHandler.isFeatureEnabled()) {
+            // Register Command
+            getCommand("reset").setExecutor(new ResetCommand(this, configHandler));
+
+            if (configHandler.isJoinResetEnabled()) {
                 // Register Listener
-                getServer().getPluginManager().registerEvents(new PlayerConnection(configHandler), this);
-                
-                // Register Command
-                getCommand("reset").setExecutor(new ResetCommand(this, configHandler));
+                getServer().getPluginManager().registerEvents(new PlayerConnection(this), this);
             }
-                
+
+            if (configHandler.isDSResetEnabled()) {
+                // Register Listener
+                new DSProcess(this);
+            }
         }
     }
 
@@ -53,7 +60,7 @@ public class Reset64 extends JavaPlugin {
     /**
      * Attempts to hook into the BlankHook plugin.
      *
-     * @return true if the hook was successful, false otherwise.
+     * @return {@code true} if the hook was successful, {@code false} otherwise
      */
     private boolean setupBlankHook() {
         //if (getServer().getPluginManager().getPlugin("BlankHook")==null) return false;
@@ -68,7 +75,7 @@ public class Reset64 extends JavaPlugin {
      * Checks if the specified plugin is available and enabled on the server.
      *
      * @param pluginName the name of the plugin to check
-     * @return true if the plugin is available and enabled, false otherwise.
+     * @return {@code true} if the plugin is available and enabled, {@code false} otherwise
      */
     private boolean isPluginAvailable(String pluginName) {
 		final Plugin plugin = getServer().getPluginManager().getPlugin(pluginName);
@@ -102,4 +109,19 @@ public class Reset64 extends JavaPlugin {
             getServer().getConsoleSender().sendMessage("[Reset64] " + chatColor + s);
 	}
 
+    /**
+     * Executes a command as the console.
+     * 
+     * @param command the command to execute
+     * @return {@code true} if the command was successfully executed, {@code false} otherwise
+     */
+    public boolean runCommand(String command) {
+        ConsoleCommandSender console = getServer().getConsoleSender();
+        try {
+            return Bukkit.dispatchCommand(console, command);
+        } catch (Exception e) {
+            log(ChatColor.RED, "Caught exception running command " + command + ": " + e.getMessage());
+            return false;
+        }
+    }
 }

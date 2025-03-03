@@ -4,14 +4,11 @@ description: ${project.description}
 author: tbm00
 main: dev.tbm00.spigot.reset64.Reset64
 api-version: 1.17
-depend: []
+depend: [DisplayShops]
 commands:
   reset:
     description: Main command for Reset64
 permissions:
-  reset64.cmd.base:
-    description: Ability to use the /reset base-command
-    default: op
-  reset64.cmd.sub:
-    description: Ability to use the /reset sub-command
+  reset64.cmd:
+    description: Ability to use the /reset command
     default: op

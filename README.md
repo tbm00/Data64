@@ -3,30 +3,51 @@ A spigot plugin that resets player data.
 
 Created by tbm00 for play.mc64.wtf.
 
+
 ## Features
-- none
+- Reset (scale-back) players' pocket balance (Vault), bank balance (BankPlus), rank (LuckPerms), job levels (Jobs Reborn), and shop (DisplayShops).
+
 
 ## Dependencies
 - **Java 17+**: REQUIRED
 - **Spigot 1.18.1+**: UNTESTED ON OLDER VERSIONS
+- **PlaceholderAPI**: REQUIRED
+- **Vault**: OPTIONAL
+- **BankPlus**: OPTIONAL
+- **LuckPerms**: OPTIONAL
+- **Jobs Reborn**: OPTIONAL
+- **DisplayShops**: OPTIONAL
+
 
 ## Commands
 #### Player Commands
 - none
 
 #### Admin Commands
-- `/reset` Base-command
-- `/reset sub` Sub-command
+- `/reset <player>` Reset a player's economy, rank, and job levels
+
 
 ## Permissions
 #### Player Permissions
-- `null` none *(default: everyone)*
+- none
 
 #### Admin Permissions
-- `reset64.cmd.base` Ability to use the /reset base-command *(default: op)*
-- `reset64.cmd.sub` Ability to use the /reset sub-command *(default: op)*
+- `reset64.cmd` Ability to use the /reset command *(default: op)*
 
 
 ## Config
 ```
+# Reset64 v0.0.1-beta by @tbm00
+# https://github.com/tbm00/Reset64
+
+enabled: true
+
+lang:
+  prefix: "&8[&fR64&8] &7"
+
+resetOnJoin:
+  enabled: false
+
+displayShopReset:
+  enabled: false
 ```

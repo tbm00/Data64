@@ -13,19 +13,14 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
-import net.md_5.bungee.api.chat.TextComponent;
-
 import dev.tbm00.spigot.reset64.Reset64;
 import dev.tbm00.spigot.reset64.process.ResetProcess;
-import dev.tbm00.spigot.reset64.ConfigHandler;
 
 public class ResetCommand implements TabExecutor {
     private final Reset64 javaPlugin;
-    private final ConfigHandler configHandler;
 
-    public ResetCommand(Reset64 javaPlugin, ConfigHandler configHandler) {
+    public ResetCommand(Reset64 javaPlugin) {
         this.javaPlugin = javaPlugin;
-        this.configHandler = configHandler;
     }
 
     /**
@@ -40,7 +35,7 @@ public class ResetCommand implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!hasPermission(sender, "reset64.cmd")) {
-            sendMessage(sender, ChatColor.RED + "No permission!");
+            javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
             return true;
         }
 
@@ -48,7 +43,7 @@ public class ResetCommand implements TabExecutor {
 
         Player target = getPlayer(args[0]);
         if (target == null) {
-            sendMessage(sender, ChatColor.RED + "Could not find target player!");
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target player!");
             return true;
         } 
         
@@ -86,17 +81,6 @@ public class ResetCommand implements TabExecutor {
      */
     private boolean hasPermission(CommandSender sender, String perm) {
         return sender.hasPermission(perm) || sender instanceof ConsoleCommandSender;
-    }
-
-    /**
-     * Sends a message to a target CommandSender.
-     * 
-     * @param target the CommandSender to send the message to
-     * @param string the message to send
-     */
-    private void sendMessage(CommandSender target, String string) {
-        if (!string.isBlank())
-            target.spigot().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', configHandler.getChatPrefix() + string)));
     }
 
     @Override

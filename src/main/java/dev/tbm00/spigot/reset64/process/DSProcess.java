@@ -15,10 +15,13 @@ public class DSProcess {
 
     public DSProcess(Reset64 javaPlugin) {
         this.javaPlugin = javaPlugin;
-        startProcess();
+        divideShopBalances();
     }
 
-    private void startProcess() {
+    /**
+     * Divides all display shop balances by 10.
+     */
+    private void divideShopBalances() {
         ConcurrentHashMap<String, Shop> dsMap = dsHook.getManager().getShopMap();
         int i = 0;
         for (Shop shop : dsMap.values()) {

@@ -5,11 +5,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
 import dev.tbm00.spigot.reset64.command.ResetCommand;
 import dev.tbm00.spigot.reset64.listener.PlayerConnection;
 import dev.tbm00.spigot.reset64.process.DSProcess;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Reset64 extends JavaPlugin {
     private ConfigHandler configHandler;
@@ -31,7 +33,7 @@ public class Reset64 extends JavaPlugin {
             setupHooks();
 
             // Register Command
-            getCommand("reset").setExecutor(new ResetCommand(this, configHandler));
+            getCommand("reset").setExecutor(new ResetCommand(this));
 
             if (configHandler.isJoinResetEnabled()) {
                 // Register Listener
@@ -82,7 +84,6 @@ public class Reset64 extends JavaPlugin {
 		return plugin != null && plugin.isEnabled();
 	}
 
-
     /**
      * Disables the plugin.
      */
@@ -108,6 +109,17 @@ public class Reset64 extends JavaPlugin {
 		for (String s : strings)
             getServer().getConsoleSender().sendMessage("[Reset64] " + chatColor + s);
 	}
+
+    /**
+     * Sends a message to a target CommandSender.
+     * 
+     * @param target the CommandSender to send the message to
+     * @param string the message to send
+     */
+    public void sendMessage(CommandSender target, String string) {
+        if (!string.isBlank())
+            target.spigot().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', configHandler.getChatPrefix() + string)));
+    }
 
     /**
      * Executes a command as the console.

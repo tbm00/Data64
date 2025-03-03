@@ -5,8 +5,6 @@ import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.md_5.bungee.api.chat.TextComponent;
-
 import me.clip.placeholderapi.PlaceholderAPI;
 
 import dev.tbm00.spigot.reset64.Reset64;
@@ -29,7 +27,7 @@ public class ResetProcess {
             passedRankHalve = halveRank();
             passedJobsHalve = halveJobs();
             javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.r64.processed true");
-            sendMessage(sender, ChatColor.GREEN + "Reset process for " + player.getName() + " \n" +
+            javaPlugin.sendMessage(sender, ChatColor.GREEN + "Reset process for " + player.getName() + " \n" +
                         "passedEcoDivide: " + passedEcoDivide + " \n" +
                         "passedRankHalve: " + passedRankHalve + " \n" +
                         "passedJobsHalve: " + passedJobsHalve);
@@ -44,12 +42,12 @@ public class ResetProcess {
      */
     private boolean canProcess() {
         if (player.hasPermission("mc.r64.checked")) {
-            sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by CHECKED status!");
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by CHECKED status!");
             return false;
         }
 
         if (player.hasPermission("mc.r64.processed")) {
-            sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by PROCESSED status!");
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by PROCESSED status!");
             return false;
         }
 
@@ -62,16 +60,16 @@ public class ResetProcess {
             } catch (Exception e2) {
                 javaPlugin.log(ChatColor.RED, "Caught exception getting player statistic PLAY_ONE_MINUTE: " + e.getMessage());
                 javaPlugin.log(ChatColor.RED, "Caught exception getting player statistic PLAY_ONE_TICK: " + e2.getMessage());
-                sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by playtime error!");
+                javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by playtime error!");
                 return false;
             }
         } if (current_play_ticks < 3600) {
             javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.r64.checked true");
-            sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by NEWBIE status!");
+            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by NEWBIE status!");
             return false;
         }
         
-        sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " starting..!");
+        javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " starting..!");
         return true;
     }
 
@@ -116,8 +114,8 @@ public class ResetProcess {
 
         javaPlugin.runCommand("eco set " + player.getName() + " " + pocketInt);
         javaPlugin.runCommand("bp set " + player.getName() + " " + bankInt);
-        sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s pocket: $" + pocketString + " -> $" + pocketInt);
-        sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s pocket: $" + bankString + " -> $" + bankInt);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s pocket: $" + pocketString + " -> $" + pocketInt);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s pocket: $" + bankString + " -> $" + bankInt);
         return true;
     }
 
@@ -128,178 +126,143 @@ public class ResetProcess {
      * @return {@code true} if the player's rank was successfully halved, {@code false} otherwise.
      */
     private boolean halveRank() {
-        String currentRank, nextRank;
-        String rank = parsePH("%luckperms_current_group_on_track_rank%");
+        String nextRank, rank = parsePH("%luckperms_current_group_on_track_rank%");
         int createLimit;
         
         switch (rank) {
             case "thirtyfive":
-                currentRank = "thirtyfive";
                 nextRank = "eighteen";
                 createLimit = 24;
                 break;
             case "thirtyfour":
-                currentRank = "thirtyfour";
                 nextRank = "seventeen";
                 createLimit = 24;
                 break;
             case "thirtythree":
-                currentRank = "thirtythree";
                 nextRank = "seventeen";
                 createLimit = 24;
                 break;
             case "thirtytwo":
-                currentRank = "thirtytwo";
                 nextRank = "sixteen";
                 createLimit = 24;
                 break;
             case "thirtyone":
-                currentRank = "thirtyone";
                 nextRank = "sixteen";
                 createLimit = 24;
                 break;
             case "thirty":
-                currentRank = "thirty";
                 nextRank = "fifteen";
                 createLimit = 20;
                 break;
             case "twentynine":
-                currentRank = "twentynine";
                 nextRank = "fifteen";
                 createLimit = 20;
                 break;
             case "twentyeight":
-                currentRank = "twentyeight";
                 nextRank = "fourteen";
                 createLimit = 20;
                 break;
             case "twentyseven":
-                currentRank = "twentyseven";
                 nextRank = "fourteen";
                 createLimit = 20;
                 break;
             case "twentysix":
-                currentRank = "twentysix";
                 nextRank = "thirteen";
                 createLimit = 20;
                 break;
             case "twentyfive":
-                currentRank = "twentyfive";
                 nextRank = "thirteen";
                 createLimit = 20;
                 break;
             case "twentyfour":
-                currentRank = "twentyfour";
                 nextRank = "twelve";
                 createLimit = 20;
                 break;
             case "twentythree":
-                currentRank = "twentythree";
                 nextRank = "twelve";
                 createLimit = 16;
                 break;
             case "twentytwo":
-                currentRank = "twentytwo";
                 nextRank = "eleven";
                 createLimit = 16;
                 break;
             case "twentyone":
-                currentRank = "twentyone";
                 nextRank = "eleven";
                 createLimit = 16;
                 break;
             case "twenty":
-                currentRank = "twenty";
                 nextRank = "ten";
                 createLimit = 16;
                 break;
             case "nineteen":
-                currentRank = "nineteen";
                 nextRank = "ten";
                 createLimit = 16;
                 break;
             case "eighteen":
-                currentRank = "eighteen";
                 nextRank = "nine";
                 createLimit = 16;
                 break;
             case "seventeen":
-                currentRank = "seventeen";
                 nextRank = "nine";
                 createLimit = 16;
                 break;
             case "sixteen":
-                currentRank = "sixteen";
                 nextRank = "eight";
                 createLimit = 12;
                 break;
             case "fifteen":
-                currentRank = "fifteen";
                 nextRank = "eight";
                 createLimit = 12;
                 break;
             case "fourteen":
-                currentRank = "fourteen";
                 nextRank = "seven";
                 createLimit = 12;
                 break;
             case "thirteen":
-                currentRank = "thirteen";
                 nextRank = "seven";
                 createLimit = 12;
                 break;
             case "twelve":
-                currentRank = "twelve";
                 nextRank = "six";
                 createLimit = 12;
                 break;
             case "eleven":
-                currentRank = "eleven";
                 nextRank = "six";
                 createLimit = 12;
                 break;
             case "ten":
-                currentRank = "ten";
                 nextRank = "five";
                 createLimit = 12;
                 break;
             case "nine":
-                currentRank = "nine";
                 nextRank = "five";
                 createLimit = 6;
                 break;
             case "eight":
-                currentRank = "eight";
                 nextRank = "four";
                 createLimit = 6;
                 break;
             case "seven":
-                currentRank = "seven";
                 nextRank = "four";
                 createLimit = 6;
                 break;
             case "six":
-                currentRank = "six";
                 nextRank = "three";
                 createLimit = 6;
                 break;
             case "five":
-                currentRank = "five";
                 nextRank = "three";
                 createLimit = 6;
                 break;
             case "four":
-                currentRank = "four";
                 nextRank = "two";
                 createLimit = 6;
                 break;
             case "three":
-                currentRank = "three";
                 nextRank = "two";
                 createLimit = 6;
                 break;
             case "two":
-                currentRank = "two";
                 nextRank = "one";
                 createLimit = 4;
                 break;
@@ -307,9 +270,9 @@ public class ResetProcess {
                 return false;
         }
         javaPlugin.runCommand("lp user " + player.getName() + " permission set meta.griefdefender\\.create-limit." + createLimit);
-        javaPlugin.runCommand("lp user " + player.getName() + " permission unset group." + currentRank);
+        javaPlugin.runCommand("lp user " + player.getName() + " permission unset group." + rank);
         javaPlugin.runCommand("lp user " + player.getName() + " permission set group." + nextRank + " true");
-        sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s rank: " + currentRank + " -> " + nextRank);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s rank: " + rank + " -> " + nextRank);
         return true;
     }
 
@@ -327,7 +290,7 @@ public class ResetProcess {
             lvl = lvl / 2;
             javaPlugin.runCommand("jobs exp " + player.getName() + " Brewer set 0");
             javaPlugin.runCommand("jobs lvl " + player.getName() + " Brewer set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Brewer lvl: " + lvlBrewer + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Brewer lvl: " + lvlBrewer + " -> " + lvl);
         }
     
         String lvlDigger = parsePH("%jobsr_user_jlevel_digger%");
@@ -336,7 +299,7 @@ public class ResetProcess {
             lvl = lvl / 2;
             javaPlugin.runCommand("jobs exp " + player.getName() + " Digger set 0");
             javaPlugin.runCommand("jobs lvl " + player.getName() + " Digger set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Digger lvl: " + lvlDigger + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Digger lvl: " + lvlDigger + " -> " + lvl);
         }
     
         String lvlFarmer = parsePH("%jobsr_user_jlevel_farmer%");
@@ -345,7 +308,7 @@ public class ResetProcess {
             lvl = lvl / 2;
             javaPlugin.runCommand("jobs exp " + player.getName() + " Farmer set 0");
             javaPlugin.runCommand("jobs lvl " + player.getName() + " Farmer set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Farmer lvl: " + lvlFarmer + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Farmer lvl: " + lvlFarmer + " -> " + lvl);
         }
     
         String lvlFisherman = parsePH("%jobsr_user_jlevel_fisherman%");
@@ -354,7 +317,7 @@ public class ResetProcess {
             lvl = lvl / 2;
             javaPlugin.runCommand("jobs exp " + player.getName() + " Fisherman set 0");
             javaPlugin.runCommand("jobs lvl " + player.getName() + " Fisherman set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Fisherman lvl: " + lvlFisherman + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Fisherman lvl: " + lvlFisherman + " -> " + lvl);
         }
 
         String lvlHunter = parsePH("%jobsr_user_jlevel_hunter%");
@@ -363,7 +326,7 @@ public class ResetProcess {
             lvl = lvl/2;
             javaPlugin.runCommand("jobs exp "+player.getName()+" Hunter set 0");
             javaPlugin.runCommand("jobs lvl "+player.getName()+" Hunter set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Hunter lvl: " + lvlHunter + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Hunter lvl: " + lvlHunter + " -> " + lvl);
         }
     
         String lvlMiner = parsePH("%jobsr_user_jlevel_miner%");
@@ -372,7 +335,7 @@ public class ResetProcess {
             lvl = lvl / 2;
             javaPlugin.runCommand("jobs exp " + player.getName() + " Miner set 0");
             javaPlugin.runCommand("jobs lvl " + player.getName() + " Miner set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Miner lvl: " + lvlMiner + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Miner lvl: " + lvlMiner + " -> " + lvl);
         }
     
         String lvlWoodcutter = parsePH("%jobsr_user_jlevel_woodcutter%");
@@ -381,7 +344,7 @@ public class ResetProcess {
             lvl = lvl / 2;
             javaPlugin.runCommand("jobs exp " + player.getName() + " Woodcutter set 0");
             javaPlugin.runCommand("jobs lvl " + player.getName() + " Woodcutter set " + lvl);
-            sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Woodcutter lvl: " + lvlWoodcutter + " -> " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Woodcutter lvl: " + lvlWoodcutter + " -> " + lvl);
         }
         
         return true;
@@ -395,16 +358,5 @@ public class ResetProcess {
      */
     private String parsePH(String placeholder) {
         return PlaceholderAPI.setPlaceholders(player, placeholder);
-    }
-
-    /**
-     * Sends a message to a target CommandSender.
-     * 
-     * @param target the CommandSender to send the message to
-     * @param string the message to send
-     */
-    private void sendMessage(CommandSender target, String string) {
-        if (!string.isBlank())
-            target.spigot().sendMessage(new TextComponent(ChatColor.translateAlternateColorCodes('&', "&8[&fR64&8] &7" + string)));
     }
 }

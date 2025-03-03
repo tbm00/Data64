@@ -37,7 +37,7 @@ Created by tbm00 for play.mc64.wtf.
 
 ## Config
 ```
-# Reset64 v0.0.1-beta by @tbm00
+# Reset64 v0.0.2-beta by @tbm00
 # https://github.com/tbm00/Reset64
 
 enabled: true

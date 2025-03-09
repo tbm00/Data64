@@ -1,4 +1,4 @@
-package dev.tbm00.spigot.reset64;
+package dev.tbm00.spigot.data64;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -10,11 +10,11 @@ import org.bukkit.ChatColor;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
-import dev.tbm00.spigot.reset64.command.ResetCommand;
-import dev.tbm00.spigot.reset64.listener.PlayerConnection;
-import dev.tbm00.spigot.reset64.process.DSProcess;
+import dev.tbm00.spigot.data64.command.DataCommand;
+import dev.tbm00.spigot.data64.listener.PlayerConnection;
+import dev.tbm00.spigot.data64.process.DSProcess;
 
-public class Reset64 extends JavaPlugin {
+public class Data64 extends JavaPlugin {
     private ConfigHandler configHandler;
 
     @Override
@@ -34,7 +34,7 @@ public class Reset64 extends JavaPlugin {
             setupHooks();
 
             // Register Command
-            getCommand("reset").setExecutor(new ResetCommand(this));
+            getCommand("dataadmin").setExecutor(new DataCommand(this));
 
             if (configHandler.isJoinResetEnabled()) {
                 // Register Listener
@@ -97,7 +97,7 @@ public class Reset64 extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        log(ChatColor.RED, "Reset64 disabled..!");
+        log(ChatColor.RED, "Data64 disabled..!");
     }
 
     /**
@@ -108,7 +108,7 @@ public class Reset64 extends JavaPlugin {
      */
     public void log(ChatColor chatColor, String... strings) {
 		for (String s : strings)
-            getServer().getConsoleSender().sendMessage("[Reset64] " + chatColor + s);
+            getServer().getConsoleSender().sendMessage("[Data64] " + chatColor + s);
 	}
 
     /**

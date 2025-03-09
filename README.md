@@ -1,4 +1,4 @@
-# Reset64
+# Data64
 A spigot plugin that resets player data.
 
 Created by tbm00 for play.mc64.wtf.
@@ -32,18 +32,18 @@ Created by tbm00 for play.mc64.wtf.
 - none
 
 #### Admin Permissions
-- `reset64.cmd` Ability to use the /reset command *(default: op)*
+- `data64.cmd` Ability to use the /reset command *(default: op)*
 
 
 ## Config
 ```
-# Reset64 v0.0.2-beta by @tbm00
-# https://github.com/tbm00/Reset64
+# Data64 v0.0.2-beta by @tbm00
+# https://github.com/tbm00/Data64
 
 enabled: true
 
 lang:
-  prefix: "&8[&fR64&8] &7"
+  prefix: "&8[&fD64&8] &7"
 
 resetOnJoin:
   enabled: false

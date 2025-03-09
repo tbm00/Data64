@@ -1,10 +1,10 @@
-# Reset64 v0.0.2-beta by @tbm00
-# https://github.com/tbm00/Reset64
+# Data64 v0.0.2-beta by @tbm00
+# https://github.com/tbm00/Data64
 
 enabled: true
 
 lang:
-  prefix: "&8[&fR64&8] &7"
+  prefix: "&8[&fD64&8] &7"
 
 resetOnJoin:
   enabled: false

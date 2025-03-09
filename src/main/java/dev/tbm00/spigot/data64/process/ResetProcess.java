@@ -1,4 +1,4 @@
-package dev.tbm00.spigot.reset64.process;
+package dev.tbm00.spigot.data64.process;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -8,17 +8,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 
-import dev.tbm00.spigot.reset64.Reset64;
+import dev.tbm00.spigot.data64.Data64;
 
 public class ResetProcess {
-    private Reset64 javaPlugin;
+    private Data64 javaPlugin;
     private CommandSender sender;
     private Player player;
     private boolean passedEcoDivide;
     private boolean passedRankHalve;
     private boolean passedJobsHalve;
 
-    public ResetProcess(Reset64 javaPlugin, CommandSender sender, Player player) {
+    public ResetProcess(Data64 javaPlugin, CommandSender sender, Player player) {
         this.javaPlugin = javaPlugin;
         this.player = player;
         this.sender = sender;
@@ -27,7 +27,7 @@ public class ResetProcess {
             passedEcoDivide = divideEco();
             passedRankHalve = halveRank();
             passedJobsHalve = halveJobs();
-            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.r64.processed true");
+            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.processed true");
             javaPlugin.sendMessage(sender, ChatColor.GREEN + "Reset process for " + player.getName() + " \n" +
                         "passedEcoDivide: " + passedEcoDivide + " \n" +
                         "passedRankHalve: " + passedRankHalve + " \n" +
@@ -42,12 +42,12 @@ public class ResetProcess {
      * @return {@code true} if the player is able to be processed, {@code false} otherwise.
      */
     private boolean canProcess() {
-        if (player.hasPermission("mc.r64.checked")) {
+        if (player.hasPermission("mc.d64.checked")) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by CHECKED status!");
             return false;
         }
 
-        if (player.hasPermission("mc.r64.processed")) {
+        if (player.hasPermission("mc.d64.processed")) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by PROCESSED status!");
             sendNotif(player);
             return false;
@@ -66,7 +66,7 @@ public class ResetProcess {
                 return false;
             }
         } if (current_play_ticks < 3600) {
-            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.r64.checked true");
+            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.checked true");
             javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by NEWBIE status!");
             return false;
         }

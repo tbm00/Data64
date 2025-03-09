@@ -1,10 +1,10 @@
-package dev.tbm00.spigot.reset64;
+package dev.tbm00.spigot.data64;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.ChatColor;
 
 public class ConfigHandler {
-    private final Reset64 javaPlugin;
+    private final Data64 javaPlugin;
     private String chatPrefix;
     private boolean joinResetEnabled = false;
     private boolean dsResetEnabled = false;
@@ -15,7 +15,7 @@ public class ConfigHandler {
      *
      * @param javaPlugin the main plugin instance
      */
-    public ConfigHandler(Reset64 javaPlugin) {
+    public ConfigHandler(Data64 javaPlugin) {
         this.javaPlugin = javaPlugin;
         try {
             loadLanguageSection();

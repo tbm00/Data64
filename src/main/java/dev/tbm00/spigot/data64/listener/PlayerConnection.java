@@ -1,16 +1,16 @@
-package dev.tbm00.spigot.reset64.listener;
+package dev.tbm00.spigot.data64.listener;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import dev.tbm00.spigot.reset64.Reset64;
-import dev.tbm00.spigot.reset64.process.ResetProcess;
+import dev.tbm00.spigot.data64.Data64;
+import dev.tbm00.spigot.data64.process.ResetProcess;
 
 public class PlayerConnection implements Listener {
-    private final Reset64 javaPlugin;
+    private final Data64 javaPlugin;
 
-    public PlayerConnection(Reset64 javaPlugin) {
+    public PlayerConnection(Data64 javaPlugin) {
         this.javaPlugin = javaPlugin;
     }
 

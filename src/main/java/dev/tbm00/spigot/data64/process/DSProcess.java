@@ -1,4 +1,4 @@
-package dev.tbm00.spigot.reset64.process;
+package dev.tbm00.spigot.data64.process;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -7,13 +7,13 @@ import org.bukkit.ChatColor;
 import xzot1k.plugins.ds.DisplayShopsAPI;
 import xzot1k.plugins.ds.api.objects.Shop;
 
-import dev.tbm00.spigot.reset64.Reset64;
+import dev.tbm00.spigot.data64.Data64;
 
 public class DSProcess {
-    private Reset64 javaPlugin;
+    private Data64 javaPlugin;
     private DisplayShopsAPI dsHook;
 
-    public DSProcess(Reset64 javaPlugin) {
+    public DSProcess(Data64 javaPlugin) {
         this.javaPlugin = javaPlugin;
         divideShopBalances();
     }

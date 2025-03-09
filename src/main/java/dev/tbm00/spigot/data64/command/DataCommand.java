@@ -1,6 +1,6 @@
 
 
-package dev.tbm00.spigot.reset64.command;
+package dev.tbm00.spigot.data64.command;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -13,13 +13,13 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
-import dev.tbm00.spigot.reset64.Reset64;
-import dev.tbm00.spigot.reset64.process.ResetProcess;
+import dev.tbm00.spigot.data64.Data64;
+import dev.tbm00.spigot.data64.process.ResetProcess;
 
-public class ResetCommand implements TabExecutor {
-    private final Reset64 javaPlugin;
+public class DataCommand implements TabExecutor {
+    private final Data64 javaPlugin;
 
-    public ResetCommand(Reset64 javaPlugin) {
+    public DataCommand(Data64 javaPlugin) {
         this.javaPlugin = javaPlugin;
     }
 
@@ -34,32 +34,37 @@ public class ResetCommand implements TabExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!hasPermission(sender, "reset64.cmd")) {
+        if (!hasPermission(sender, "data64.cmd")) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
             return true;
         }
 
         if (args.length == 0) return false;
 
-        Player target = getPlayer(args[0]);
-        if (target == null) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target player!");
-            return true;
-        } 
-        
-        handleResetCmd(sender, target);
-        return true;
-
+        String subCmd = args[0].toLowerCase();
+        switch (subCmd) {
+            case "reset":
+                return handleResetCmd(sender, args[0]);
+            default:
+                return false;
+        }
     }
 
     /**
      * Handles the reset command.
      * 
      * @param sender the command sender
-     * @param player the player passed to the command
+     * @param name the player passed to the command
      */
-    private void handleResetCmd(CommandSender sender, Player player) {
-        new ResetProcess(javaPlugin, sender, player);
+    private boolean handleResetCmd(CommandSender sender, String name) {
+        Player target = getPlayer(name);
+        if (target == null) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target player!");
+            return true;
+        } 
+
+        new ResetProcess(javaPlugin, sender, target);
+        return true;
     }
     
     /**
@@ -86,7 +91,7 @@ public class ResetCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();
-        if (hasPermission(sender, "reset64.cmd") && args.length == 1) {
+        if (hasPermission(sender, "data64.cmd") && args.length == 1) {
             Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
         }
         return list;

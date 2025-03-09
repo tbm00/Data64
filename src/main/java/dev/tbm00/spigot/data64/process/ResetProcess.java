@@ -14,19 +14,19 @@ public class ResetProcess {
     private Data64 javaPlugin;
     private CommandSender sender;
     private Player player;
-    private boolean passedEcoDivide;
-    private boolean passedRankHalve;
-    private boolean passedJobsHalve;
 
     public ResetProcess(Data64 javaPlugin, CommandSender sender, Player player) {
         this.javaPlugin = javaPlugin;
         this.player = player;
         this.sender = sender;
 
+        boolean passedEcoDivide, passedRankHalve, passedJobsHalve;
+
         if (canProcess()) {
             passedEcoDivide = divideEco();
             passedRankHalve = halveRank();
             passedJobsHalve = halveJobs();
+            
             javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.processed true");
             javaPlugin.sendMessage(sender, ChatColor.GREEN + "Reset process for " + player.getName() + " \n" +
                         "passedEcoDivide: " + passedEcoDivide + " \n" +

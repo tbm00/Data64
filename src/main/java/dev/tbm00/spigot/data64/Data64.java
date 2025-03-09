@@ -3,6 +3,9 @@ package dev.tbm00.spigot.data64;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.earth2me.essentials.Essentials;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -10,12 +13,22 @@ import org.bukkit.ChatColor;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
+import xzot1k.plugins.ds.DisplayShops;
+import xzot1k.plugins.ds.DisplayShopsAPI;
+
+import com.olziedev.playerwarps.api.PlayerWarpsAPI;
+
 import dev.tbm00.spigot.data64.command.DataCommand;
+import dev.tbm00.spigot.data64.hook.GDHook;
 import dev.tbm00.spigot.data64.listener.PlayerConnection;
 import dev.tbm00.spigot.data64.process.DSProcess;
 
 public class Data64 extends JavaPlugin {
     private ConfigHandler configHandler;
+    public static DisplayShopsAPI dsHook;
+    public static GDHook gdHook;
+    public static Essentials essHook;
+    public static PlayerWarpsAPI pwHook;
 
     @Override
     public void onEnable() {
@@ -53,24 +66,87 @@ public class Data64 extends JavaPlugin {
      * Disables the plugin if any required hook fails.
      */
     private void setupHooks() {
-        if (!setupBlankHook()) {
-            getLogger().severe("BlankHook failed -- disabling plugin!");
+        if (!setupGriefDefender()) {
+            getLogger().severe("GriefDefender hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupDisplayShops()) {
+            getLogger().severe("DisplayShops hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupEssentials()) {
+            getLogger().severe("Essentials hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupPlayerWarps()) {
+            getLogger().severe("PlayerWarps hook failed -- disabling plugin!");
             disablePlugin();
             return;
         }
     }
 
     /**
-     * Attempts to hook into the BlankHook plugin.
+     * Attempts to hook into the GriefDefender plugin.
      *
-     * @return {@code true} if the hook was successful, {@code false} otherwise
+     * @return true if the hook was successful, false otherwise.
      */
-    private boolean setupBlankHook() {
-        //if (getServer().getPluginManager().getPlugin("BlankHook")==null) return false;
+    private boolean setupGriefDefender() {
+        if (!isPluginAvailable("GriefDefender")) return false;
 
-        //BlankHook = new BlankHook();
+        Data64.gdHook = new GDHook(this);
+
+        log(ChatColor.GREEN, "GriefDefender hooked.");
+        return true;
+    }
+
+    /**
+     * Attempts to hook into the DisplayShops plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupDisplayShops() {
+        if (!isPluginAvailable("DisplayShops")) return false;
+
+        Data64.dsHook = (DisplayShops) getServer().getPluginManager().getPlugin("DisplayShops");
         
-        log(ChatColor.GREEN, "BlankHook hooked.");
+        log(ChatColor.GREEN, "DisplayShops hooked.");
+        return true;
+    }
+
+    /**
+     * Attempts to hook into the Essentials plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupEssentials() {
+        if (!isPluginAvailable("Essentials")) return false;
+
+        Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
+        if (essentials.isEnabled() && essentials instanceof Essentials)
+            essHook = (Essentials) essentials;
+        else return false;
+
+        log(ChatColor.GREEN, "Essentials hooked.");
+        return true;
+    }
+
+    /**
+     * Attempts to hook into the PlayerWarps plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupPlayerWarps() {
+        if (!isPluginAvailable("PlayerWarps")) return false;
+
+        pwHook = PlayerWarpsAPI.getInstance();
+
+        log(ChatColor.GREEN, "PlayerWarps hooked.");
         return true;
     }
 

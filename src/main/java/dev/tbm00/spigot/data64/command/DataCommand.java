@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
 import dev.tbm00.spigot.data64.Data64;
-import dev.tbm00.spigot.data64.process.ResetProcess;
+import dev.tbm00.spigot.data64.process.*;
 
 public class DataCommand implements TabExecutor {
     private final Data64 javaPlugin;
@@ -45,6 +45,8 @@ public class DataCommand implements TabExecutor {
         switch (subCmd) {
             case "reset":
                 return handleResetCmd(sender, args[0]);
+            case "transfer":
+                return handleTransferCmd(sender, args[0], args[1]);
             default:
                 return false;
         }
@@ -64,6 +66,30 @@ public class DataCommand implements TabExecutor {
         } 
 
         new ResetProcess(javaPlugin, sender, target);
+        return true;
+    }
+
+    /**
+     * Handles the reset command.
+     * 
+     * @param sender the command sender
+     * @param nameA the username passed to the command (data pulled from)
+     * @param nameB the username passed to the command (data pasted on)
+     */
+    private boolean handleTransferCmd(CommandSender sender, String nameA, String nameB) {
+        Player playerA = getPlayer(nameA);
+        if (playerA == null) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target (from) player!");
+            return true;
+        } 
+
+        Player playerB = getPlayer(nameB);
+        if (playerB == null) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target (to) player!");
+            return true;
+        } 
+
+        new TransferProcess(javaPlugin, sender, playerA, playerB);
         return true;
     }
     

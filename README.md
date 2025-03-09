@@ -5,18 +5,23 @@ Created by tbm00 for play.mc64.wtf.
 
 
 ## Features
-- Reset (scale-back) players' pocket balance (Vault), bank balance (BankPlus), rank (LuckPerms), job levels (Jobs Reborn), and shop (DisplayShops).
+- Reset (scale-back) players' pocket balances, bank balances, ranks, job levels, and shop balances.
+- Transfer data from player to player:
+  - rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, and job stats
 
 
 ## Dependencies
 - **Java 17+**: REQUIRED
 - **Spigot 1.18.1+**: UNTESTED ON OLDER VERSIONS
 - **PlaceholderAPI**: REQUIRED
-- **Vault**: OPTIONAL
-- **BankPlus**: OPTIONAL
-- **LuckPerms**: OPTIONAL
-- **Jobs Reborn**: OPTIONAL
-- **DisplayShops**: OPTIONAL
+- **LuckPerms**: REQUIRED
+- **EssentialsX**: REQUIRED
+- **Vault**: REQUIRED
+- **BankPlus**: REQUIRED
+- **DisplayShops**: REQUIRED
+- **PlayerWarps**: REQUIRED
+- **GriefDefender**: REQUIRED
+- **Jobs Reborn**: REQUIRED
 
 
 ## Commands
@@ -24,7 +29,8 @@ Created by tbm00 for play.mc64.wtf.
 - none
 
 #### Admin Commands
-- `/reset <player>` Reset a player's economy, rank, and job levels
+- `/dataadmin reset <player>` Reset a player's economy, rank, and job levels
+- `/dataadmin transfer <playerFrom> <playerTo>` Transfer player's data to another account
 
 
 ## Permissions
@@ -37,7 +43,7 @@ Created by tbm00 for play.mc64.wtf.
 
 ## Config
 ```
-# Data64 v0.0.2-beta by @tbm00
+# Data64 v0.0.3-beta by @tbm00
 # https://github.com/tbm00/Data64
 
 enabled: true

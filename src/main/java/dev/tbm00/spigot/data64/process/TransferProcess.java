@@ -254,7 +254,7 @@ public class TransferProcess {
         List<ItemStack> allItems = new ArrayList<>();
 
         // Collect armor slots
-        for (ItemStack armor : invA.getArmorContents()) {
+        /*for (ItemStack armor : invA.getArmorContents()) {
             if (armor != null && armor.getType() != Material.AIR) {
                 allItems.add(armor);
             }
@@ -264,7 +264,7 @@ public class TransferProcess {
         ItemStack offhand = invA.getItemInOffHand();
         if (offhand != null && offhand.getType() != Material.AIR) {
             allItems.add(offhand);
-        }
+        }*/
         
         // Collect inventory items
         for (ItemStack item : invA.getContents()) {

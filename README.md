@@ -7,7 +7,7 @@ Created by tbm00 for play.mc64.wtf.
 ## Features
 - Reset (scale-back) players' pocket balances, bank balances, ranks, job levels, and shop balances.
 - Transfer data from player to player:
-  - rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, and job stats
+  - rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, pets, and job stats
 
 
 ## Dependencies
@@ -23,6 +23,7 @@ Created by tbm00 for play.mc64.wtf.
 - **GriefDefender**: REQUIRED
 - **Jobs Reborn**: REQUIRED
 - **GangsPlus**: REQUIRED
+- **MyPet**: REQUIRED
 
 
 ## Commands
@@ -45,7 +46,7 @@ Created by tbm00 for play.mc64.wtf.
 
 ## Config
 ```
-# Data64 v0.0.3-beta by @tbm00
+# Data64 v0.0.4-beta by @tbm00
 # https://github.com/tbm00/Data64
 
 enabled: true

@@ -21,9 +21,13 @@ import xzot1k.plugins.ds.api.objects.Shop;
 import com.olziedev.playerwarps.api.warp.Warp;
 import com.olziedev.playerwarps.api.player.WPlayer;
 import net.brcdev.gangs.gang.Gang;
+import de.Keyle.MyPet.MyPetApi;
+import de.Keyle.MyPet.api.entity.StoredMyPet;
+import de.Keyle.MyPet.api.player.MyPetPlayer;
+import de.Keyle.MyPet.api.repository.RepositoryCallback;
 
 import dev.tbm00.spigot.data64.Data64;
-import dev.tbm00.spigot.data64.hook.GDHook;
+import dev.tbm00.spigot.data64.hook.*;
 
 public class TransferProcess {
     private Data64 javaPlugin;
@@ -37,7 +41,7 @@ public class TransferProcess {
         this.playerB = playerB;
 
         javaPlugin.sendMessage(sender, ChatColor.GREEN + "Transfer process for " + playerA.getName() + " -> " + playerB.getName());
-        tPerms();
+        tPerms1();
         tClaimBlocks();
         tClaims();
         tJobs();
@@ -48,8 +52,10 @@ public class TransferProcess {
         tHomes();
         tWarps();
         tGangs();
-        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, and job stats have been transferred from player " + playerA.getName());
-        javaPlugin.runCommand("ban " + playerA.getName() + "&aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
+        tPets();
+        tPerms2();
+        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, pets, and job stats have been transferred from player " + playerA.getName());
+        javaPlugin.runCommand("ban " + playerA.getName() + " &aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
     }
 
     /**
@@ -57,16 +63,26 @@ public class TransferProcess {
      *
      * @return {@code true} if the permission transfer process completes successfully, {@code false} otherwise.
      */
-    private boolean tPerms() {
+    private boolean tPerms1() {
         String rankB = parsePH(playerB, "%luckperms_current_group_on_track_rank%");
-        String rankA = parsePH(playerA, "%luckperms_current_group_on_track_rank%");
 
         javaPlugin.runCommand("lp user " + playerB.getName() + " permission unset group." + rankB);
         javaPlugin.runCommand("lp user " + playerA.getName() + " clone " + playerB.getName());
-        javaPlugin.runCommand("lp user " + playerA.getName() + " clear");
         javaPlugin.runCommand("lp user " + playerB.getName() + " permission set mc.ranknotime true");
+
+        rankB = parsePH(playerB, "%luckperms_current_group_on_track_rank%");
         
-        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPerms: " + playerB.getName() + " now rank: " + rankA);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPerms: " + playerB.getName() + " now rank: " + rankB);
+        return true;
+    }
+
+    /**
+     * Clears source player's permission nodes
+     *
+     * @return {@code true} if the permission transfer process completes successfully, {@code false} otherwise.
+     */
+    private boolean tPerms2() {
+        javaPlugin.runCommand("lp user " + playerA.getName() + " clear");
         return true;
     }
 
@@ -414,7 +430,7 @@ public class TransferProcess {
             int rankA = gangA.getMemberData(playerA).getRank();
 
             gangA.addMember(playerB, rankA);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: " + gangA.getName() + " " + rankA);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: " + gangA.getName() + " &e" + rankA);
     
             if (gangA.getOwner().getUniqueId().equals(playerA.getUniqueId())) {
                 gangA.setOwner(playerB);
@@ -448,6 +464,38 @@ public class TransferProcess {
             gangA.removeMember(playerA);
             return true;
         }
+    }
+
+    /**
+     * Transfers pets from source player to target player.
+     * 
+     * @return true once transfer completes
+     */
+    private boolean tPets() {
+        if (!MyPetApi.getPlayerManager().isMyPetPlayer(playerA)) {
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPets: false");
+            return true;
+        }
+
+        final MyPetPlayer myPlayerA = PetHook.getPlayerManager().getMyPetPlayer(playerA),
+                            myPlayerB = PetHook.getPlayerManager().getMyPetPlayer(playerB);
+        
+        PetHook.storeCurrentPet(myPlayerA);
+        PetHook.storeCurrentPet(myPlayerB);
+
+        MyPetApi.getRepository().getMyPets(myPlayerA, new RepositoryCallback<List<StoredMyPet>>() {
+            @Override
+            public void callback(List<StoredMyPet> pets) {
+                for (StoredMyPet myPet : pets) {
+                    myPet.setOwner(myPlayerB);
+                    MyPetApi.getRepository().updateMyPet(myPet, null);
+                    MyPetApi.getRepository().savePet(myPet);
+                }
+            }
+        });
+
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPets: true");
+        return true;
     }
 
     /**

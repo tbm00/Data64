@@ -3,9 +3,7 @@ package dev.tbm00.spigot.data64;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.earth2me.essentials.Essentials;
-
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -13,10 +11,11 @@ import org.bukkit.ChatColor;
 
 import net.md_5.bungee.api.chat.TextComponent;
 
+import com.earth2me.essentials.Essentials;
 import xzot1k.plugins.ds.DisplayShops;
 import xzot1k.plugins.ds.DisplayShopsAPI;
-
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
+import net.brcdev.gangs.GangsPlugin;
 
 import dev.tbm00.spigot.data64.command.DataCommand;
 import dev.tbm00.spigot.data64.hook.GDHook;
@@ -29,6 +28,7 @@ public class Data64 extends JavaPlugin {
     public static GDHook gdHook;
     public static Essentials essHook;
     public static PlayerWarpsAPI pwHook;
+    public static GangsPlugin gangHook;
 
     @Override
     public void onEnable() {
@@ -86,6 +86,12 @@ public class Data64 extends JavaPlugin {
 
         if (!setupPlayerWarps()) {
             getLogger().severe("PlayerWarps hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupGangsPlus()) {
+            getLogger().severe("GangsPlus hook failed -- disabling plugin!");
             disablePlugin();
             return;
         }
@@ -151,6 +157,23 @@ public class Data64 extends JavaPlugin {
     }
 
     /**
+     * Attempts to hook into the GangsPlus plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupGangsPlus() {
+        if (!isPluginAvailable("GangsPlus")) return false;
+
+        Plugin gangp = Bukkit.getPluginManager().getPlugin("GangsPlus");
+        if (gangp.isEnabled() && gangp instanceof GangsPlugin)
+            gangHook = (GangsPlugin) gangp;
+        else return false;
+
+        log(ChatColor.GREEN, "GangsPlus hooked.");
+        return true;
+    }
+
+    /**
      * Checks if the specified plugin is available and enabled on the server.
      *
      * @param pluginName the name of the plugin to check
@@ -212,5 +235,23 @@ public class Data64 extends JavaPlugin {
             log(ChatColor.RED, "Caught exception running command " + command + ": " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Executes a command as the console after waiting.
+     * 
+     * 
+     * @param command the command to execute
+     * @param delay the tick delay
+     * @return {@code true} if the command was successfully executed, {@code false} otherwise
+     */
+    public boolean runCommandDelayed(String command, int delay) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                runCommand(command);
+            }
+        }.runTaskLater(this, delay);
+        return true;
     }
 }

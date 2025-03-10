@@ -1,7 +1,6 @@
 package dev.tbm00.spigot.data64.hook;
 
 import java.util.UUID;
-import java.util.Set;
 
 import org.bukkit.OfflinePlayer;
 
@@ -20,13 +19,18 @@ public class GDHook {
         return gd.getUser(player.getUniqueId()).getPlayerData().getClaims().size();
 	}
 
+	public static int getAccruedBlocks(OfflinePlayer player) {
+		final Core gd = GriefDefender.getCore();
+        return gd.getUser(player.getUniqueId()).getPlayerData().getAccruedClaimBlocks();
+	}
+
 	public static void transferClaims(OfflinePlayer playerA, OfflinePlayer playerB) {
 		final Core gd = GriefDefender.getCore();
         UUID uuidB = playerB.getUniqueId();
 
-        Set<Claim> claimsA = gd.getUser(playerA.getUniqueId()).getPlayerData().getClaims();
-        for (Claim claim : claimsA) {
-            claim.transferOwner(uuidB);
-        }
+        Claim[] claimsA = gd.getUser(playerA.getUniqueId()).getPlayerData().getClaims().toArray(new Claim[0]);
+		for (Claim claim : claimsA) {
+			claim.transferOwner(uuidB);
+		}
 	}
 }

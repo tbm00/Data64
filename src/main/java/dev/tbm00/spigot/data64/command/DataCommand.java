@@ -34,19 +34,14 @@ public class DataCommand implements TabExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!hasPermission(sender, "data64.cmd")) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
-            return true;
-        }
-
         if (args.length == 0) return false;
 
         String subCmd = args[0].toLowerCase();
         switch (subCmd) {
             case "reset":
-                return handleResetCmd(sender, args[0]);
+                return handleResetCmd(sender, args[1]);
             case "transfer":
-                return handleTransferCmd(sender, args[0], args[1]);
+                return handleTransferCmd(sender, args[1], args[2]);
             default:
                 return false;
         }
@@ -59,6 +54,11 @@ public class DataCommand implements TabExecutor {
      * @param name the player passed to the command
      */
     private boolean handleResetCmd(CommandSender sender, String name) {
+        if (!hasPermission(sender, "data64.cmd.reset")) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
+            return true;
+        }
+
         Player target = getPlayer(name);
         if (target == null) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target player!");
@@ -77,6 +77,11 @@ public class DataCommand implements TabExecutor {
      * @param nameB the username passed to the command (data pasted on)
      */
     private boolean handleTransferCmd(CommandSender sender, String nameA, String nameB) {
+        if (!hasPermission(sender, "data64.cmd.transfer")) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
+            return true;
+        }
+
         Player playerA = getPlayer(nameA);
         if (playerA == null) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "Could not find target (from) player!");
@@ -117,8 +122,21 @@ public class DataCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();
-        if (hasPermission(sender, "data64.cmd") && args.length == 1) {
-            Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
+        if (args.length == 1) {
+            if (hasPermission(sender, "data64.cmd.reset")) {
+                list.add("reset");
+            }
+            if (hasPermission(sender, "data64.cmd.reset")) {
+                list.add("transfer");
+            }
+        } else if (args.length == 2) {
+            if (hasPermission(sender, "data64.cmd.reset") || hasPermission(sender, "data64.cmd.transfer")) {
+                Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
+            }
+        } else if (args.length == 3) {
+            if (hasPermission(sender, "data64.cmd.transfer")) {
+                Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));
+            }
         }
         return list;
     }

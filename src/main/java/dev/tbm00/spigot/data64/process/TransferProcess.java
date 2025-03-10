@@ -17,11 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-
 import xzot1k.plugins.ds.api.objects.Shop;
-
 import com.olziedev.playerwarps.api.warp.Warp;
 import com.olziedev.playerwarps.api.player.WPlayer;
+import net.brcdev.gangs.gang.Gang;
 
 import dev.tbm00.spigot.data64.Data64;
 import dev.tbm00.spigot.data64.hook.GDHook;
@@ -33,6 +32,7 @@ public class TransferProcess {
 
     public TransferProcess(Data64 javaPlugin, CommandSender sender, Player playerA, Player playerB) {
         this.javaPlugin = javaPlugin;
+        this.sender = sender;
         this.playerA = playerA;
         this.playerB = playerB;
 
@@ -47,8 +47,9 @@ public class TransferProcess {
         tShops();
         tHomes();
         tWarps();
-        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, and job stats have been transferred from player \n" + playerA.getName());
-        javaPlugin.sendMessage(playerA, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, and job stats have been transferred to player \n" + playerB.getName());
+        tGangs();
+        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, and job stats have been transferred from player " + playerA.getName());
+        javaPlugin.runCommand("ban " + playerA.getName() + "&aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
     }
 
     /**
@@ -87,10 +88,11 @@ public class TransferProcess {
             return false;
         }
 
+        int accruedA = GDHook.getAccruedBlocks(playerA);
         int total = totalA + totalB;
 
         javaPlugin.runCommand("gd player adjustbonusblocks " + playerB.getName() + " " + total);
-        javaPlugin.runCommand("gd player adjustbonusblocks " + playerA.getName() + " 0");
+        javaPlugin.runCommand("gd player adjustbonusblocks " + playerA.getName() + " -" + accruedA);
         javaPlugin.runCommand("gd player setaccruedblocks " + playerA.getName() + " 0");
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tClaimBlocks: " + playerB.getName() + " + " + total + " bonus blocks");
         return true;
@@ -129,7 +131,8 @@ public class TransferProcess {
         String lvlBrewer = parsePH(playerA, "%jobsr_user_jlevel_brewer%");
         if (!lvlBrewer.equals("0")) {
             lvl = Integer.parseInt(lvlBrewer);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName() + " Brewer set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Brewer");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Brewer set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Brewer: " + lvl);
             
         }
@@ -137,42 +140,48 @@ public class TransferProcess {
         String lvlDigger = parsePH(playerA, "%jobsr_user_jlevel_digger%");
         if (!lvlDigger.equals("0")) {
             lvl = Integer.parseInt(lvlDigger);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName() + " Digger set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Digger");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Digger set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Digger: " + lvl);
         }
     
         String lvlFarmer = parsePH(playerA, "%jobsr_user_jlevel_farmer%");
         if (!lvlFarmer.equals("0")) {
             lvl = Integer.parseInt(lvlFarmer);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName() + " Farmer set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Farmer");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Farmer set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Farmer: " + lvl);
         }
     
         String lvlFisherman = parsePH(playerA, "%jobsr_user_jlevel_fisherman%");
         if (!lvlFisherman.equals("0")) {
             lvl = Integer.parseInt(lvlFisherman);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName() + " Fisherman set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Fisherman");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Fisherman set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Fisherman: " + lvl);
         }
 
         String lvlHunter = parsePH(playerA, "%jobsr_user_jlevel_hunter%");
         if (!lvlHunter.equals("0")) {
             lvl = Integer.parseInt(lvlHunter);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName()+" Hunter set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Hunter");
+            javaPlugin.runCommand("jobs level " + playerB.getName()+" Hunter set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Hunter: " + lvl);
         }
     
         String lvlMiner = parsePH(playerA, "%jobsr_user_jlevel_miner%");
         if (!lvlMiner.equals("0")) {
             lvl = Integer.parseInt(lvlMiner);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName() + " Miner set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Miner");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Miner set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Miner: " + lvl);
         }
     
         String lvlWoodcutter = parsePH(playerA, "%jobsr_user_jlevel_woodcutter%");
         if (!lvlWoodcutter.equals("0")) {
             lvl = Integer.parseInt(lvlWoodcutter);
-            javaPlugin.runCommand("jobs lvl " + playerB.getName() + " Woodcutter set " + lvl);
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Woodcutter");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Woodcutter set " + lvl);
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Woodcutter: " + lvl);
         }
         
@@ -214,8 +223,8 @@ public class TransferProcess {
         javaPlugin.runCommand("bp set " + playerB.getName() + " " + bankInt);
         javaPlugin.runCommand("eco set " + playerA.getName() + " 0");
         javaPlugin.runCommand("bp set " + playerA.getName() + " 0");
-        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tEco p" + playerB.getName() + " $" + pocketStringB + " -> $" + pocketInt);
-        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tEco b" + playerB.getName() + " $" + bankStringB + " -> $" + bankInt);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPocket " + playerB.getName() + " $" + pocketStringB + " -> $" + pocketInt);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tBank " + playerB.getName() + " $" + bankStringB + " -> $" + bankInt);
         return true;
     }
 
@@ -368,7 +377,7 @@ public class TransferProcess {
      * @return true once transfer completes
      */
     private boolean tWarps() {
-        List<Warp> warps = Data64.pwHook.getPlayerWarps(true, playerA);
+        List<Warp> warps = Data64.pwHook.getPlayerWarps(true, sender);
 
         if (warps == null || warps.isEmpty()) {
             javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tWarps: 0");
@@ -379,12 +388,66 @@ public class TransferProcess {
 
         int i = 0;
         for (Warp warp : warps) {
-            warp.setWarpPlayer(wplayerB);
-            ++i;
+            if (warp.isWarpOwner(playerA, "op")) {
+                warp.setWarpPlayer(wplayerB);
+                ++i;
+            }
         }
 
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tWarps: " + i);
         return true;
+    }
+
+    /**
+     * Transfers player gang from source player to target player.
+     * 
+     * @return true once transfer completes
+     */
+    private boolean tGangs() {
+        if (!Data64.gangHook.getGangManager().isInGang(playerA)) {
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: no source gang");
+            return true;
+        }
+
+        if (!Data64.gangHook.getGangManager().isInGang(playerB)) {
+            Gang gangA = Data64.gangHook.getGangManager().getPlayersGang(playerA);
+            int rankA = gangA.getMemberData(playerA).getRank();
+
+            gangA.addMember(playerB, rankA);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: " + gangA.getName() + " " + rankA);
+    
+            if (gangA.getOwner().getUniqueId().equals(playerA.getUniqueId())) {
+                gangA.setOwner(playerB);
+                javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGangOwner: true");
+            }
+
+            gangA.removeMember(playerA);
+            return true;
+        } else {
+            Gang gangA = Data64.gangHook.getGangManager().getPlayersGang(playerA);
+            Gang gangB = Data64.gangHook.getGangManager().getPlayersGang(playerB);
+
+            if (!gangA.equals(gangB)) {
+                javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: in different gangs");
+                return true;
+            }
+
+            int rankA = gangA.getMemberData(playerA).getRank();
+            int rankB = gangA.getMemberData(playerB).getRank();
+
+            if (rankA > rankB) {
+                gangB.getMemberData(playerB).setRank(rankA);
+                javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: " + gangA.getName() + " &e" + rankA);
+            } else javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGang: " + gangB.getName() + " &e" + rankB);
+
+            if (gangA.getOwner().getUniqueId().equals(playerA.getUniqueId())) {
+                gangA.setOwner(playerB);
+                javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tGangOwner: true");
+            }
+
+            gangA.removeMember(playerA);
+            return true;
+        }
     }
 
     /**

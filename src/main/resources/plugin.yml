@@ -4,11 +4,14 @@ description: ${project.description}
 author: tbm00
 main: dev.tbm00.spigot.data64.Data64
 api-version: 1.17
-depend: [DisplayShops, GriefDefender, Essentials, PlayerWarps]
+depend: [DisplayShops, GriefDefender, Essentials, PlayerWarps, GangsPlus]
 commands:
   dataadmin:
     description: Main command for Data64
 permissions:
-  data64.cmd:
-    description: Ability to use the /dataadmin command
+  data64.cmd.reset:
+    description: Ability to use the `/dataadmin reset` command
+    default: op
+  data64.cmd.transfer:
+    description: Ability to use the `/dataadmin transfer` command
     default: op

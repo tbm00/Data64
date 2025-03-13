@@ -4,7 +4,7 @@ description: ${project.description}
 author: tbm00
 main: dev.tbm00.spigot.data64.Data64
 api-version: 1.17
-depend: [DisplayShops, GriefDefender, Essentials, PlayerWarps, GangsPlus, MyPet]
+depend: [DisplayShops, GriefDefender, Essentials, PlayerWarps, GangsPlus, MyPet, BankPlus]
 commands:
   dataadmin:
     description: Main command for Data64

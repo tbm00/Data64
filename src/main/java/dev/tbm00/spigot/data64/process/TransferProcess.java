@@ -3,6 +3,7 @@ package dev.tbm00.spigot.data64.process;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.ChatColor;
@@ -25,6 +26,8 @@ import de.Keyle.MyPet.MyPetApi;
 import de.Keyle.MyPet.api.entity.StoredMyPet;
 import de.Keyle.MyPet.api.player.MyPetPlayer;
 import de.Keyle.MyPet.api.repository.RepositoryCallback;
+import me.pulsi_.bankplus.economy.BPEconomy;
+import me.pulsi_.bankplus.values.ConfigValues;
 
 import dev.tbm00.spigot.data64.Data64;
 import dev.tbm00.spigot.data64.hook.*;
@@ -235,10 +238,15 @@ public class TransferProcess {
         int pocketInt = (int) Math.round(pocket);
         int bankInt = (int) Math.round(bank);
 
+        BPEconomy economy = BPEconomy.get(ConfigValues.getMainGuiName());
+        BigDecimal bankDecA = BigDecimal.valueOf(0.0);
+        BigDecimal bankDecB = BigDecimal.valueOf((double) bankInt);
+
         javaPlugin.runCommand("eco set " + playerB.getName() + " " + pocketInt);
-        javaPlugin.runCommand("bp set " + playerB.getName() + " " + bankInt);
+        economy.setBankBalance(playerB, bankDecB);
+
         javaPlugin.runCommand("eco set " + playerA.getName() + " 0");
-        javaPlugin.runCommand("bp set " + playerA.getName() + " 0");
+        economy.setBankBalance(playerA, bankDecA);
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPocket " + playerB.getName() + " $" + pocketStringB + " -> $" + pocketInt);
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tBank " + playerB.getName() + " $" + bankStringB + " -> $" + bankInt);
         return true;

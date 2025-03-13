@@ -17,6 +17,7 @@ import xzot1k.plugins.ds.DisplayShops;
 import xzot1k.plugins.ds.DisplayShopsAPI;
 import net.brcdev.gangs.GangsPlugin;
 import de.Keyle.MyPet.MyPetPlugin;
+import me.pulsi_.bankplus.BankPlus;
 
 import dev.tbm00.spigot.data64.hook.*;
 import dev.tbm00.spigot.data64.command.DataCommand;
@@ -31,6 +32,7 @@ public class Data64 extends JavaPlugin {
     public static PlayerWarpsAPI pwHook;
     public static GangsPlugin gangHook;
     public static PetHook petHook;
+    public static BankPlus bankHook;
 
     @Override
     public void onEnable() {
@@ -100,6 +102,12 @@ public class Data64 extends JavaPlugin {
 
         if (!setupMyPet()) {
             getLogger().severe("MyPet hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupBankPlus()) {
+            getLogger().severe("BankPlus hook failed -- disabling plugin!");
             disablePlugin();
             return;
         }
@@ -195,6 +203,23 @@ public class Data64 extends JavaPlugin {
         } else return false;
 
         log(ChatColor.GREEN, "MyPet hooked.");
+        return true;
+    }
+
+    /**
+     * Attempts to hook into the BankPlus plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupBankPlus() {
+        if (!isPluginAvailable("BankPlus")) return false;
+
+        Plugin bankp = Bukkit.getPluginManager().getPlugin("BankPlus");
+        if (bankp.isEnabled()) {
+            bankHook = (BankPlus) bankp;
+        } else return false;
+
+        log(ChatColor.GREEN, "BankPlus hooked.");
         return true;
     }
 

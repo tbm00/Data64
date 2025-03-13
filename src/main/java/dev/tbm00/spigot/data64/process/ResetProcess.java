@@ -1,5 +1,7 @@
 package dev.tbm00.spigot.data64.process;
 
+import java.math.BigDecimal;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
@@ -7,7 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-
+import me.pulsi_.bankplus.economy.BPEconomy;
+import me.pulsi_.bankplus.values.ConfigValues;
 import dev.tbm00.spigot.data64.Data64;
 
 public class ResetProcess {
@@ -115,8 +118,11 @@ public class ResetProcess {
         int pocketInt = (int) Math.round(pocket);
         int bankInt = (int) Math.round(bank);
 
+        BPEconomy economy = BPEconomy.get(ConfigValues.getMainGuiName());
+        BigDecimal bankDec = BigDecimal.valueOf((double) bankInt);
+
         javaPlugin.runCommand("eco set " + player.getName() + " " + pocketInt);
-        javaPlugin.runCommand("bp set " + player.getName() + " " + bankInt);
+        economy.setBankBalance(player, bankDec);
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s pocket: $" + pocketString + " -> $" + pocketInt);
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s pocket: $" + bankString + " -> $" + bankInt);
         return true;

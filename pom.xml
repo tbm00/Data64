@@ -116,6 +116,13 @@
             <systemPath>${project.basedir}/depend/MyPet-3_12-SNAPSHOT-B1782.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>me.pulsi_.BankPlus</groupId>
+            <artifactId>BankPlus</artifactId>
+            <version>6.3-Alpha4-MC64</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/depend/BankPlus-6_3-Alpha4-MC64.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.olziedev</groupId>
             <artifactId>playerwarps-api</artifactId>
             <version>7.7.1</version>

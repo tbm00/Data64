@@ -57,7 +57,8 @@ public class TransferProcess {
         tGangs();
         tPets();
         tPerms2();
-        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, pets, and job stats have been transferred from player " + playerA.getName());
+        tPVPStats();
+        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, pets, pvp stats, and job stats have been transferred from player " + playerA.getName());
         javaPlugin.runCommand("ban " + playerA.getName() + " &aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
     }
 
@@ -507,6 +508,30 @@ public class TransferProcess {
     }
 
     /**
+     * Transfers PVPStats from source player to target player.
+     * 
+     * @return true once transfer completes
+     */
+    private boolean tPVPStats() {
+        int aKills, aDeaths, aStreak, aCurrentstreak, aElo;
+
+        aKills = getPvpStat("kills", playerA);
+        aDeaths = getPvpStat("deaths", playerA);
+        aStreak = getPvpStat("streak", playerA);
+        aCurrentstreak = getPvpStat("currentstreak", playerA);
+        aElo = getPvpStat("elo", playerA);
+
+        setPvpStat("kills", playerB, aKills+getPvpStat("kills", playerB));
+        setPvpStat("deaths", playerB, aDeaths+getPvpStat("deaths", playerB));
+        setPvpStat("streak", playerB, aStreak);
+        setPvpStat("currentstreak", playerB, aCurrentstreak);
+        setPvpStat("elo", playerB, aElo);
+
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPVPStats: true");
+        return true;
+    }
+
+    /**
      * Creates a shulker box containing items from the provided list.
      * 
      * @param name the display name for the shulker box
@@ -556,5 +581,28 @@ public class TransferProcess {
      */
     private String parsePH(Player player, String placeholder) {
         return PlaceholderAPI.setPlaceholders(player, placeholder);
+    }
+
+    /**
+     * Gets PVPStats stat by player
+     */
+    public static int getPvpStat(String stat, Player player) {
+        try {
+            return Data64.pvpHook.getSQLHandler().getStats(stat, player.getUniqueId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * Sets PVPStats stat by player
+     */
+    public static void setPvpStat(String stat, Player player, int amount) {
+        try {
+            Data64.pvpHook.getSQLHandler().setSpecificStat(player.getUniqueId(), stat, amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

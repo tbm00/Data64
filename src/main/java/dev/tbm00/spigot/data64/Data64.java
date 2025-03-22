@@ -13,11 +13,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import com.earth2me.essentials.Essentials;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
+
 import xzot1k.plugins.ds.DisplayShops;
 import xzot1k.plugins.ds.DisplayShopsAPI;
 import net.brcdev.gangs.GangsPlugin;
 import de.Keyle.MyPet.MyPetPlugin;
 import me.pulsi_.bankplus.BankPlus;
+import net.slipcor.pvpstats.PVPStats;
 
 import dev.tbm00.spigot.data64.hook.*;
 import dev.tbm00.spigot.data64.command.DataCommand;
@@ -33,6 +35,7 @@ public class Data64 extends JavaPlugin {
     public static GangsPlugin gangHook;
     public static PetHook petHook;
     public static BankPlus bankHook;
+    public static PVPStats pvpHook;
 
     @Override
     public void onEnable() {
@@ -108,6 +111,12 @@ public class Data64 extends JavaPlugin {
 
         if (!setupBankPlus()) {
             getLogger().severe("BankPlus hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupPVPStats()) {
+            getLogger().severe("PVPStats hook failed -- disabling plugin!");
             disablePlugin();
             return;
         }
@@ -220,6 +229,23 @@ public class Data64 extends JavaPlugin {
         } else return false;
 
         log(ChatColor.GREEN, "BankPlus hooked.");
+        return true;
+    }
+
+    /**
+     * Attempts to hook into the PVPStats plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupPVPStats() {
+        if (!isPluginAvailable("PVPStats")) return false;
+
+        Plugin pvpp = Bukkit.getPluginManager().getPlugin("PVPStats");
+        if (pvpp.isEnabled() && pvpp instanceof PVPStats)
+            pvpHook = (PVPStats) pvpp;
+        else return false;
+
+        log(ChatColor.GREEN, "PVPStats hooked.");
         return true;
     }
 

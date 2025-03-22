@@ -24,6 +24,7 @@ Created by tbm00 for play.mc64.wtf.
 - **Jobs Reborn**: REQUIRED
 - **GangsPlus**: REQUIRED
 - **MyPet**: REQUIRED
+- **PVPStats**: REQUIRED
 
 
 ## Commands
@@ -46,7 +47,7 @@ Created by tbm00 for play.mc64.wtf.
 
 ## Config
 ```
-# Data64 v0.0.4-beta by @tbm00
+# Data64 v0.0.5-beta by @tbm00
 # https://github.com/tbm00/Data64
 
 enabled: true

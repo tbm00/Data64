@@ -68,15 +68,14 @@ public class TransferProcess {
      * @return {@code true} if the permission transfer process completes successfully, {@code false} otherwise.
      */
     private boolean tPerms1() {
+        String rankA = parsePH(playerA, "%luckperms_current_group_on_track_rank%");
         String rankB = parsePH(playerB, "%luckperms_current_group_on_track_rank%");
 
         javaPlugin.runCommand("lp user " + playerB.getName() + " permission unset group." + rankB);
         javaPlugin.runCommand("lp user " + playerA.getName() + " clone " + playerB.getName());
         javaPlugin.runCommand("lp user " + playerB.getName() + " permission set mc.ranknotime true");
-
-        rankB = parsePH(playerB, "%luckperms_current_group_on_track_rank%");
         
-        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPerms: " + playerB.getName() + " now rank: " + rankB);
+        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPerms: " + playerB.getName() + " now rank: " + rankA);
         return true;
     }
 

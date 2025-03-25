@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.math.BigDecimal;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
@@ -59,7 +60,9 @@ public class TransferProcess {
         tPerms2();
         tPVPStats();
         javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, pets, pvp stats, and job stats have been transferred from player " + playerA.getName());
-        javaPlugin.runCommand("ban " + playerA.getName() + " &aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
+        Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
+            javaPlugin.runCommand("ban " + playerA.getName() + " &aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
+        }, 5L);
     }
 
     /**
@@ -145,63 +148,140 @@ public class TransferProcess {
      * @return {@code true} after updating job levels for all applicable jobs.
      */
     private boolean tJobs() {
-        Integer lvl = 0;
+        Integer lvlA = 0, lvlB = 0, newLvl = 0;
+        String lvlB_holder, lvlA_holder;
 
-        String lvlBrewer = parsePH(playerA, "%jobsr_user_jlevel_brewer%");
-        if (!lvlBrewer.equals("0")) {
-            lvl = Integer.parseInt(lvlBrewer);
-            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Brewer");
-            javaPlugin.runCommand("jobs level " + playerB.getName() + " Brewer set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Brewer: " + lvl);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_brewer%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_brewer%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
             
+            javaPlugin.runCommand("jobs employ " + playerB.getName() + " Brewer");
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Brewer set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Brewer: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
     
-        String lvlDigger = parsePH(playerA, "%jobsr_user_jlevel_digger%");
-        if (!lvlDigger.equals("0")) {
-            lvl = Integer.parseInt(lvlDigger);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_digger%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+            
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_digger%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
+            
             javaPlugin.runCommand("jobs employ " + playerB.getName() + " Digger");
-            javaPlugin.runCommand("jobs level " + playerB.getName() + " Digger set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Digger: " + lvl);
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Digger set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Digger: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
     
-        String lvlFarmer = parsePH(playerA, "%jobsr_user_jlevel_farmer%");
-        if (!lvlFarmer.equals("0")) {
-            lvl = Integer.parseInt(lvlFarmer);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_farmer%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+            
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_farmer%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
+            
             javaPlugin.runCommand("jobs employ " + playerB.getName() + " Farmer");
-            javaPlugin.runCommand("jobs level " + playerB.getName() + " Farmer set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Farmer: " + lvl);
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Farmer set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Farmer: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
     
-        String lvlFisherman = parsePH(playerA, "%jobsr_user_jlevel_fisherman%");
-        if (!lvlFisherman.equals("0")) {
-            lvl = Integer.parseInt(lvlFisherman);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_fisherman%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+            
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_fisherman%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
+            
             javaPlugin.runCommand("jobs employ " + playerB.getName() + " Fisherman");
-            javaPlugin.runCommand("jobs level " + playerB.getName() + " Fisherman set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Fisherman: " + lvl);
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Fisherman set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Fisherman: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
 
-        String lvlHunter = parsePH(playerA, "%jobsr_user_jlevel_hunter%");
-        if (!lvlHunter.equals("0")) {
-            lvl = Integer.parseInt(lvlHunter);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_hunter%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+            
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_hunter%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
+            
             javaPlugin.runCommand("jobs employ " + playerB.getName() + " Hunter");
-            javaPlugin.runCommand("jobs level " + playerB.getName()+" Hunter set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Hunter: " + lvl);
+            javaPlugin.runCommand("jobs level " + playerB.getName()+" Hunter set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Hunter: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
     
-        String lvlMiner = parsePH(playerA, "%jobsr_user_jlevel_miner%");
-        if (!lvlMiner.equals("0")) {
-            lvl = Integer.parseInt(lvlMiner);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_miner%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+            
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_miner%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
+            
             javaPlugin.runCommand("jobs employ " + playerB.getName() + " Miner");
-            javaPlugin.runCommand("jobs level " + playerB.getName() + " Miner set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Miner: " + lvl);
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Miner set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Miner: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
     
-        String lvlWoodcutter = parsePH(playerA, "%jobsr_user_jlevel_woodcutter%");
-        if (!lvlWoodcutter.equals("0")) {
-            lvl = Integer.parseInt(lvlWoodcutter);
+        lvlA_holder = parsePH(playerA, "%jobsr_user_jlevel_woodcutter%");
+        if (!lvlA_holder.equals("0")) {
+            lvlA = Integer.parseInt(lvlA_holder);
+            
+            lvlB_holder = parsePH(playerB, "%jobsr_user_jlevel_woodcutter%");
+            if (!lvlB_holder.equals("0"))
+                lvlB = Integer.parseInt(lvlB_holder);
+
+            newLvl = lvlA + lvlB;
+            
             javaPlugin.runCommand("jobs employ " + playerB.getName() + " Woodcutter");
-            javaPlugin.runCommand("jobs level " + playerB.getName() + " Woodcutter set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Woodcutter: " + lvl);
+            javaPlugin.runCommand("jobs level " + playerB.getName() + " Woodcutter set " + newLvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tJobs Woodcutter: " + newLvl);
+
+            lvlA = 0;
+            lvlB = 0;
+            newLvl = 0;
         }
         
         javaPlugin.runCommand("jobs fireall " + playerA.getName());

@@ -13,7 +13,7 @@ public class PetHook extends MyPetApi {
 	}
 
 	public static void storeCurrentPet(MyPetPlayer player) {
-        if (player.hasMyPet()) {
+        if (player!=null && player.hasMyPet()) {
             MyPet myPet = player.getMyPet();
             String worldGroup = myPet.getWorldGroup();
 

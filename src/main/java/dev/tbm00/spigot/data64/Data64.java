@@ -2,6 +2,7 @@ package dev.tbm00.spigot.data64;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Bukkit;
@@ -13,7 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 import com.earth2me.essentials.Essentials;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
-
+import net.milkbowl.vault.economy.Economy;
 import xzot1k.plugins.ds.DisplayShops;
 import xzot1k.plugins.ds.DisplayShopsAPI;
 import net.brcdev.gangs.GangsPlugin;
@@ -24,7 +25,6 @@ import net.slipcor.pvpstats.PVPStats;
 import dev.tbm00.spigot.data64.hook.*;
 import dev.tbm00.spigot.data64.command.DataCommand;
 import dev.tbm00.spigot.data64.listener.PlayerConnection;
-import dev.tbm00.spigot.data64.process.DSProcess;
 
 public class Data64 extends JavaPlugin {
     private ConfigHandler configHandler;
@@ -36,6 +36,7 @@ public class Data64 extends JavaPlugin {
     public static PetHook petHook;
     public static BankPlus bankHook;
     public static PVPStats pvpHook;
+    public static Economy ecoHook;
 
     @Override
     public void onEnable() {
@@ -60,11 +61,6 @@ public class Data64 extends JavaPlugin {
                 // Register Listener
                 getServer().getPluginManager().registerEvents(new PlayerConnection(this), this);
             }
-
-            if (configHandler.isDSResetEnabled()) {
-                // Register Listener
-                new DSProcess(this);
-            }
         }
     }
 
@@ -73,6 +69,12 @@ public class Data64 extends JavaPlugin {
      * Disables the plugin if any required hook fails.
      */
     private void setupHooks() {
+        if (!setupVault()) {
+            getLogger().severe("Vault hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
         if (!setupGriefDefender()) {
             getLogger().severe("GriefDefender hook failed -- disabling plugin!");
             disablePlugin();
@@ -120,6 +122,18 @@ public class Data64 extends JavaPlugin {
             disablePlugin();
             return;
         }
+    }
+
+    private boolean setupVault() {
+        if (!isPluginAvailable("Vault")) return false;
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) return false;
+        ecoHook = rsp.getProvider();
+        if (ecoHook == null) return false;
+
+        log(ChatColor.GREEN, "Vault hooked.");
+        return true;
     }
 
     /**

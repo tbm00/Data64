@@ -42,6 +42,8 @@ public class DataCommand implements TabExecutor {
                 return handleResetCmd(sender, args[1]);
             case "transfer":
                 return handleTransferCmd(sender, args[1], args[2]);
+            case "dsreset":
+                return handleDSResetCmd(sender);
             default:
                 return false;
         }
@@ -66,6 +68,21 @@ public class DataCommand implements TabExecutor {
         } 
 
         new ResetProcess(javaPlugin, sender, target);
+        return true;
+    }
+
+    /**
+     * Handles the displayshop reset command.
+     * 
+     * @param sender the command sender
+     */
+    private boolean handleDSResetCmd(CommandSender sender) {
+        if (!hasPermission(sender, "data64.cmd.dsreset")) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
+            return true;
+        }
+
+        new DSProcess(javaPlugin);
         return true;
     }
 

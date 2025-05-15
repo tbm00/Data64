@@ -40,18 +40,18 @@ public class ResetProcess {
 
     /**
      * Checks if the player's data can be reset.
-     * (not applicable if already checked, reset, or newbie)
+     * (not applicable if already processed or newbie)
      *
      * @return {@code true} if the player is able to be processed, {@code false} otherwise.
      */
     private boolean canProcess() {
-        if (player.hasPermission("mc.d64.checked")) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by CHECKED status!");
+        if (player.hasPermission("mc.d64.newbie")) {
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior NEWBIE status!");
             return false;
         }
 
         if (player.hasPermission("mc.d64.processed")) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by PROCESSED status!");
+            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior PROCESSED status!");
             sendNotif(player);
             return false;
         }
@@ -65,12 +65,12 @@ public class ResetProcess {
             } catch (Exception e2) {
                 javaPlugin.log(ChatColor.RED, "Caught exception getting player statistic PLAY_ONE_MINUTE: " + e.getMessage());
                 javaPlugin.log(ChatColor.RED, "Caught exception getting player statistic PLAY_ONE_TICK: " + e2.getMessage());
-                javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by playtime error!");
-                return false;
+                javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " started with a playtime error!");
+                current_play_ticks = 3601;
             }
         } if (current_play_ticks < 3600) {
-            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.checked true");
-            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by NEWBIE status!");
+            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
+            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status!");
             return false;
         }
         
@@ -278,7 +278,7 @@ public class ResetProcess {
             default:
                 return false;
         }
-        javaPlugin.runCommand("lp user " + player.getName() + " permission set meta.griefdefender\\.create-limit." + createLimit);
+        //javaPlugin.runCommand("lp user " + player.getName() + " permission set meta.griefdefender\\.create-limit." + createLimit);
         javaPlugin.runCommand("lp user " + player.getName() + " permission unset group." + rank);
         javaPlugin.runCommand("lp user " + player.getName() + " permission set group." + nextRank + " true");
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s rank: " + rank + " -> " + nextRank);
@@ -369,9 +369,17 @@ public class ResetProcess {
             @Override
             public void run() {
                 if (player!=null) {
-                    javaPlugin.sendMessage(player, "&l&bHey! &rIn our latest update, we overhauled our economy to be significantly more competitive and player-driven. \n" +
-                        "After a lot of thought, we decided to deflate everyone's pocket balance, bank balance, and rank, as well as completely remove the AdminShop and nerf job income. Now when you do /shop, it will pull up a category GUI for you to find other players' shops to buy from/sell to. With these changes, we suspect new and old shop owners will be the richest! \n" +
-                        "We've also re-added /coinflip and /bounty, as well as started rebuilding the /market in a new location -- come get a plot!");
+                    javaPlugin.sendMessage(player, "&l&bHey! &rIn our latest update, we overhauled our economy to be significantly more competitive and player-driven:\n" +
+                        "&7 - deflated economy (divided everyone's balances by ~10)\n" +
+                        "&7 - deflated ranks & job levels (divided everyone's in half)\n" +
+                        "&7 - deflated job income\n" +
+                        "&7 - added income to quests and added more quests\n" +
+                        "&7 - removed the admin shop, replaced with /shop (powered by displayshops)\n" +
+                        "Check out &l&b/discord &rto learn about more of our new features like:\n" +
+                        "&7 - Bedrock support (yes, really!!)\n" +
+                        "&7 - VoiceChat mod\n" +
+                        "&7 - Gambling /games\n" +
+                        "&7 - Rentable player /stalls in the new /market");
                 }
             }
         }.runTaskLater(javaPlugin, 300);

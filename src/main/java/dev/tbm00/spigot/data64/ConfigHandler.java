@@ -7,7 +7,6 @@ public class ConfigHandler {
     private final Data64 javaPlugin;
     private String chatPrefix;
     private boolean joinResetEnabled = false;
-    private boolean dsResetEnabled = false;
 
     /**
      * Constructs a ConfigHandler instance.
@@ -20,7 +19,6 @@ public class ConfigHandler {
         try {
             loadLanguageSection();
             loadResetOnJoinSec();
-            loadDSResetSec();
         } catch (Exception e) {
             javaPlugin.log(ChatColor.RED, "Caught exception loading config: " + e.getMessage());
         }
@@ -44,14 +42,6 @@ public class ConfigHandler {
             joinResetEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
     }
 
-    /**
-     * Loads the "displayShopReset" section of the configuration.
-     */
-    private void loadDSResetSec() {
-        ConfigurationSection section = javaPlugin.getConfig().getConfigurationSection("displayShopReset");
-        if (section!=null)
-            dsResetEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
-    }
 
     public String getChatPrefix() {
         return chatPrefix;
@@ -59,9 +49,5 @@ public class ConfigHandler {
 
     public boolean isJoinResetEnabled() {
         return joinResetEnabled;
-    }
-
-    public boolean isDSResetEnabled() {
-        return dsResetEnabled;
     }
 }

@@ -369,17 +369,13 @@ public class ResetProcess {
             @Override
             public void run() {
                 if (player!=null) {
-                    javaPlugin.sendMessage(player, "&l&bHey! &rIn our latest update, we overhauled our economy to be significantly more competitive and player-driven:\n" +
-                        "&7 - deflated economy (divided everyone's balances by ~10)\n" +
-                        "&7 - deflated ranks & job levels (divided everyone's in half)\n" +
-                        "&7 - deflated job income\n" +
-                        "&7 - added income to quests and added more quests\n" +
-                        "&7 - removed the admin shop, replaced with /shop (powered by displayshops)\n" +
-                        "Check out &l&b/discord &rto learn about more of our new features like:\n" +
-                        "&7 - Bedrock support (yes, really!!)\n" +
-                        "&7 - VoiceChat mod\n" +
-                        "&7 - Gambling /games\n" +
-                        "&7 - Rentable player /stalls in the new /market");
+                    javaPlugin.sendMessage(player, "&l&6Hey @&n"+player.getName()+", we just released the biggest update ever:\n" +
+                        "&e - deflated economy and ranks (divided EVERYONE's fairly)\n" +
+                        "&e - replace AdminShop with player-to-player /shop\n" +
+                        "&e - added Bedrock support (yes, really!!)\n" +
+                        "&e - building a new /markets\n" +
+                        "&e + new /quests, VoiceChat mod, gambling /games, and more\n" +
+                        "&6Check out #annoucements on &l&a/discord &r&6to learn more!");
                 }
             }
         }.runTaskLater(javaPlugin, 300);

@@ -33,14 +33,16 @@ public class DSProcess {
 
             double buyPrice = shop.getBuyPrice(false);
             if (buyPrice > 0) {
-                buyPrice = buyPrice/8;
-                shop.setBuyPrice((double) Math.round(buyPrice));
+                buyPrice = (double) Math.round(buyPrice/8);
+                if (buyPrice<1) buyPrice = 1;
+                shop.setBuyPrice(buyPrice);
             }
             
             double sellPrice = shop.getSellPrice(false);
             if (sellPrice > 0) {
-                sellPrice = sellPrice/8;
-                shop.setSellPrice((double) Math.round(sellPrice));
+                sellPrice = (double) Math.round(sellPrice/8);
+                if (sellPrice<1) sellPrice = 1;
+                shop.setSellPrice(sellPrice);
             }
             i++;
         }

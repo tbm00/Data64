@@ -47,7 +47,7 @@ Created by tbm00 for play.mc64.wtf.
 
 ## Config
 ```
-# Data64 v0.0.5-beta by @tbm00
+# Data64 v0.0.6-beta by @tbm00
 # https://github.com/tbm00/Data64
 
 enabled: true
@@ -56,8 +56,5 @@ lang:
   prefix: "&8[&fD64&8] &7"
 
 resetOnJoin:
-  enabled: false
-
-displayShopReset:
   enabled: false
 ```

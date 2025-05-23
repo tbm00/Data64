@@ -66,7 +66,7 @@ public class ResetProcess {
                 javaPlugin.log(ChatColor.RED, "Caught exception getting player statistic PLAY_ONE_MINUTE: " + e.getMessage());
                 javaPlugin.log(ChatColor.RED, "Caught exception getting player statistic PLAY_ONE_TICK: " + e2.getMessage());
                 javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " started with a playtime error!");
-                current_play_ticks = 3601;
+                current_play_ticks = 3600;
             }
         } if (current_play_ticks < 3600) {
             javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
@@ -369,12 +369,12 @@ public class ResetProcess {
             @Override
             public void run() {
                 if (player!=null) {
-                    javaPlugin.sendMessage(player, "&l&6Hey @&n"+player.getName()+", we just released the biggest update ever:\n" +
+                    javaPlugin.sendMessage(player, "&6Hey @&n"+player.getName()+"&r&6, we just released the biggest update ever:\n" +
                         "&e - deflated economy and ranks (divided EVERYONE's fairly)\n" +
-                        "&e - replace AdminShop with player-to-player /shop\n" +
-                        "&e - added Bedrock support (yes, really!!)\n" +
-                        "&e - building a new /markets\n" +
-                        "&e + new /quests, VoiceChat mod, gambling /games, and more\n" +
+                        "&e - replaced AdminShop with player-to-player /shop\n" +
+                        "&e - added Bedrock support\n" +
+                        "&e - built a new /market\n" +
+                        "&e + added new /quests, VoiceChat mod, gambling /games, and more\n" +
                         "&6Check out #annoucements on &l&a/discord &r&6to learn more!");
                 }
             }

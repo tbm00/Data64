@@ -55,7 +55,7 @@ public class Data64 extends JavaPlugin {
             setupHooks();
 
             // Register Command
-            getCommand("dataadmin").setExecutor(new DataCommand(this));
+            getCommand("dataadmin").setExecutor(new DataCommand(this, dsHook));
 
             if (configHandler.isJoinResetEnabled()) {
                 // Register Listener

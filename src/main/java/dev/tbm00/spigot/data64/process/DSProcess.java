@@ -13,8 +13,9 @@ public class DSProcess {
     private Data64 javaPlugin;
     private DisplayShopsAPI dsHook;
 
-    public DSProcess(Data64 javaPlugin) {
+    public DSProcess(Data64 javaPlugin, DisplayShopsAPI dsHook) {
         this.javaPlugin = javaPlugin;
+        this.dsHook = dsHook;
         alterShops();
     }
 

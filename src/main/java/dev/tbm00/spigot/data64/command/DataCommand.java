@@ -15,12 +15,15 @@ import org.bukkit.ChatColor;
 
 import dev.tbm00.spigot.data64.Data64;
 import dev.tbm00.spigot.data64.process.*;
+import xzot1k.plugins.ds.DisplayShopsAPI;
 
 public class DataCommand implements TabExecutor {
     private final Data64 javaPlugin;
+    private DisplayShopsAPI dsHook;
 
-    public DataCommand(Data64 javaPlugin) {
+    public DataCommand(Data64 javaPlugin, DisplayShopsAPI dsHook) {
         this.javaPlugin = javaPlugin;
+        this.dsHook = dsHook;
     }
 
     /**
@@ -82,7 +85,7 @@ public class DataCommand implements TabExecutor {
             return true;
         }
 
-        new DSProcess(javaPlugin);
+        new DSProcess(javaPlugin, dsHook);
         return true;
     }
 

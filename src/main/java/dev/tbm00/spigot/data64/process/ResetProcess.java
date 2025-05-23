@@ -136,149 +136,159 @@ public class ResetProcess {
      */
     private boolean halveRank() {
         String nextRank, rank = parsePH("%luckperms_current_group_on_track_rank%");
-        int createLimit;
+        int extraRows = 0;
         
         switch (rank) {
             case "thirtyfive":
                 nextRank = "eighteen";
-                createLimit = 24;
+                extraRows = 3;
                 break;
             case "thirtyfour":
                 nextRank = "seventeen";
-                createLimit = 24;
+                extraRows = 3;
                 break;
             case "thirtythree":
                 nextRank = "seventeen";
-                createLimit = 24;
+                extraRows = 3;
                 break;
             case "thirtytwo":
                 nextRank = "sixteen";
-                createLimit = 24;
+                extraRows = 3;
                 break;
             case "thirtyone":
                 nextRank = "sixteen";
-                createLimit = 24;
+                extraRows = 3;
                 break;
             case "thirty":
                 nextRank = "fifteen";
-                createLimit = 20;
+                extraRows = 3;
                 break;
             case "twentynine":
                 nextRank = "fifteen";
-                createLimit = 20;
+                extraRows = 3;
                 break;
             case "twentyeight":
                 nextRank = "fourteen";
-                createLimit = 20;
+                extraRows = 3;
                 break;
             case "twentyseven":
                 nextRank = "fourteen";
-                createLimit = 20;
+                extraRows = 3;
                 break;
             case "twentysix":
                 nextRank = "thirteen";
-                createLimit = 20;
+                extraRows = 3;
                 break;
             case "twentyfive":
                 nextRank = "thirteen";
-                createLimit = 20;
+                extraRows = 2;
                 break;
             case "twentyfour":
                 nextRank = "twelve";
-                createLimit = 20;
+                extraRows = 2;
                 break;
             case "twentythree":
                 nextRank = "twelve";
-                createLimit = 16;
+                extraRows = 2;
                 break;
             case "twentytwo":
                 nextRank = "eleven";
-                createLimit = 16;
+                extraRows = 2;
                 break;
             case "twentyone":
                 nextRank = "eleven";
-                createLimit = 16;
+                extraRows = 2;
                 break;
             case "twenty":
                 nextRank = "ten";
-                createLimit = 16;
+                extraRows = 2;
                 break;
             case "nineteen":
                 nextRank = "ten";
-                createLimit = 16;
+                extraRows = 2;
                 break;
             case "eighteen":
                 nextRank = "nine";
-                createLimit = 16;
+                extraRows = 1;
                 break;
             case "seventeen":
                 nextRank = "nine";
-                createLimit = 16;
+                extraRows = 1;
                 break;
             case "sixteen":
                 nextRank = "eight";
-                createLimit = 12;
+                extraRows = 1;
                 break;
             case "fifteen":
                 nextRank = "eight";
-                createLimit = 12;
+                extraRows = 1;
                 break;
             case "fourteen":
                 nextRank = "seven";
-                createLimit = 12;
+                extraRows = 1;
                 break;
             case "thirteen":
                 nextRank = "seven";
-                createLimit = 12;
+                extraRows = 1;
                 break;
             case "twelve":
                 nextRank = "six";
-                createLimit = 12;
+                extraRows = 1;
                 break;
             case "eleven":
                 nextRank = "six";
-                createLimit = 12;
                 break;
             case "ten":
                 nextRank = "five";
-                createLimit = 12;
                 break;
             case "nine":
                 nextRank = "five";
-                createLimit = 6;
                 break;
             case "eight":
                 nextRank = "four";
-                createLimit = 6;
                 break;
             case "seven":
                 nextRank = "four";
-                createLimit = 6;
                 break;
             case "six":
                 nextRank = "three";
-                createLimit = 6;
                 break;
             case "five":
                 nextRank = "three";
-                createLimit = 6;
                 break;
             case "four":
                 nextRank = "two";
-                createLimit = 6;
                 break;
             case "three":
                 nextRank = "two";
-                createLimit = 6;
                 break;
             case "two":
                 nextRank = "one";
-                createLimit = 4;
                 break;
             default:
                 return false;
         }
-        //javaPlugin.runCommand("lp user " + player.getName() + " permission set meta.griefdefender\\.create-limit." + createLimit);
+        if (extraRows!=0) {
+            switch (extraRows) {
+                case 3:
+                    javaPlugin.runCommand("lp user " + player.getName() + " permission set group.ender3");
+                    break;
+                case 2: {
+                    if (!player.hasPermission("group.ender3")) {
+                        javaPlugin.runCommand("lp user " + player.getName() + " permission set group.ender2");
+                    }
+                    break;
+                }
+                case 1: {
+                    if (!player.hasPermission("group.ender2") && !player.hasPermission("group.ender3")) {
+                        javaPlugin.runCommand("lp user " + player.getName() + " permission set group.ender1");
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
         javaPlugin.runCommand("lp user " + player.getName() + " permission unset group." + rank);
         javaPlugin.runCommand("lp user " + player.getName() + " permission set group." + nextRank + " true");
         javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s rank: " + rank + " -> " + nextRank);

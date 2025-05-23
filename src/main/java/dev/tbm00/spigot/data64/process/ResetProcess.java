@@ -369,7 +369,7 @@ public class ResetProcess {
             @Override
             public void run() {
                 if (player!=null) {
-                    javaPlugin.sendMessage(player, "&6Hey @&n"+player.getName()+"&r&6, we just released the biggest update ever:\n" +
+                    javaPlugin.sendMessage(player, "&6Hey @&n"+player.getName()+"&r&6, we recently released our biggest update ever:\n" +
                         "&e - deflated economy and ranks (divided EVERYONE's fairly)\n" +
                         "&e - replaced AdminShop with player-to-player /shop\n" +
                         "&e - added Bedrock support\n" +

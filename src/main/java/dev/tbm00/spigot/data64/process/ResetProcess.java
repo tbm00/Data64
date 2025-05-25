@@ -301,72 +301,37 @@ public class ResetProcess {
      * @return {@code true} after checking and halving all jobs.
      */
     private boolean halveJobs() {
-        Integer lvl = 0;
-
-        String lvlBrewer = parsePH("%jobsr_user_jlevel_brewer%");
-        if (!lvlBrewer.equals("0")) {
-            lvl = Integer.parseInt(lvlBrewer);
-            lvl = lvl / 2;
-            javaPlugin.runCommand("jobs exp " + player.getName() + " Brewer set 0");
-            javaPlugin.runCommand("jobs lvl " + player.getName() + " Brewer set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Brewer lvl: " + lvlBrewer + " -> " + lvl);
-        }
-    
-        String lvlDigger = parsePH("%jobsr_user_jlevel_digger%");
-        if (!lvlDigger.equals("0")) {
-            lvl = Integer.parseInt(lvlDigger);
-            lvl = lvl / 2;
-            javaPlugin.runCommand("jobs exp " + player.getName() + " Digger set 0");
-            javaPlugin.runCommand("jobs lvl " + player.getName() + " Digger set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Digger lvl: " + lvlDigger + " -> " + lvl);
-        }
-    
-        String lvlFarmer = parsePH("%jobsr_user_jlevel_farmer%");
-        if (!lvlFarmer.equals("0")) {
-            lvl = Integer.parseInt(lvlFarmer);
-            lvl = lvl / 2;
-            javaPlugin.runCommand("jobs exp " + player.getName() + " Farmer set 0");
-            javaPlugin.runCommand("jobs lvl " + player.getName() + " Farmer set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Farmer lvl: " + lvlFarmer + " -> " + lvl);
-        }
-    
-        String lvlFisherman = parsePH("%jobsr_user_jlevel_fisherman%");
-        if (!lvlFisherman.equals("0")) {
-            lvl = Integer.parseInt(lvlFisherman);
-            lvl = lvl / 2;
-            javaPlugin.runCommand("jobs exp " + player.getName() + " Fisherman set 0");
-            javaPlugin.runCommand("jobs lvl " + player.getName() + " Fisherman set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Fisherman lvl: " + lvlFisherman + " -> " + lvl);
-        }
-
-        String lvlHunter = parsePH("%jobsr_user_jlevel_hunter%");
-        if (!lvlHunter.equals("0")) {
-            lvl = Integer.parseInt(lvlHunter);
-            lvl = lvl/2;
-            javaPlugin.runCommand("jobs exp "+player.getName()+" Hunter set 0");
-            javaPlugin.runCommand("jobs lvl "+player.getName()+" Hunter set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Hunter lvl: " + lvlHunter + " -> " + lvl);
-        }
-    
-        String lvlMiner = parsePH("%jobsr_user_jlevel_miner%");
-        if (!lvlMiner.equals("0")) {
-            lvl = Integer.parseInt(lvlMiner);
-            lvl = lvl / 2;
-            javaPlugin.runCommand("jobs exp " + player.getName() + " Miner set 0");
-            javaPlugin.runCommand("jobs lvl " + player.getName() + " Miner set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Miner lvl: " + lvlMiner + " -> " + lvl);
-        }
-    
-        String lvlWoodcutter = parsePH("%jobsr_user_jlevel_woodcutter%");
-        if (!lvlWoodcutter.equals("0")) {
-            lvl = Integer.parseInt(lvlWoodcutter);
-            lvl = lvl / 2;
-            javaPlugin.runCommand("jobs exp " + player.getName() + " Woodcutter set 0");
-            javaPlugin.runCommand("jobs lvl " + player.getName() + " Woodcutter set " + lvl);
-            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s Woodcutter lvl: " + lvlWoodcutter + " -> " + lvl);
-        }
-        
+        halveJob("woodcutter", "Woodcutter");
+        halveJob("miner", "Miner");
+        halveJob("hunter", "Hunter");
+        halveJob("fisherman", "Fisherman");
+        halveJob("farmer", "farmer");
+        halveJob("digger", "Digger");
+        halveJob("brewer", "Brewer");
         return true;
+    }
+
+    private void halveJob(String job, String jobName) {
+        Integer lvl = 0;
+        String ogLvl = parsePH("%jobsr_user_jlevel_"+job+"%");
+        if (!ogLvl.equals("0")) {
+            try {
+                lvl = Integer.parseInt(ogLvl);
+                lvl = lvl / 2;
+            } catch (Exception e1) {
+                try {
+                    lvl = Integer.valueOf(ogLvl);
+                    lvl = lvl / 2;
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    return;
+                } 
+            }
+            
+            javaPlugin.runCommand("jobs exp " + player.getName() + " "+jobName+" set 0");
+            javaPlugin.runCommand("jobs lvl " + player.getName() + " "+jobName+" set " + lvl);
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "Reset " + player.getName() + "'s "+jobName+" lvl: " + ogLvl + " -> " + lvl);
+        }
     }
 
     /**

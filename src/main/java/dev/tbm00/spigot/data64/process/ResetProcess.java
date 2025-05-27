@@ -52,7 +52,7 @@ public class ResetProcess {
 
         if (player.hasPermission("mc.d64.processed")) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior PROCESSED status!");
-            sendNotif(player);
+            //sendNotif(player);
             return false;
         }
 
@@ -344,16 +344,10 @@ public class ResetProcess {
             @Override
             public void run() {
                 if (player!=null) {
-                    javaPlugin.sendMessage(player, "&6Hey @&n"+player.getName()+"&r&6, we recently released our biggest update ever:\n" +
-                        "&e - deflated economy and ranks (divided EVERYONE's fairly)\n" +
-                        "&e - replaced AdminShop with player-to-player /shop\n" +
-                        "&e - added Bedrock support\n" +
-                        "&e - built a new /market\n" +
-                        "&e + added new /quests, VoiceChat mod, gambling /games, and more\n" +
-                        "&6Check out #annoucements on &l&a/discord &r&6to learn more!");
+                    javaPlugin.sendMessage(player, "&eHey &6@&n"+player.getName()+"&r&e, in our latest update we significantly defalted the economy and divided EVERYONE's ranks in half! We also added many new fun features -- read more about it in #annoucements on our &l&a/discord&r&e!");
                 }
             }
-        }.runTaskLater(javaPlugin, 300);
+        }.runTaskLater(javaPlugin, 100);
     }
 
     /**

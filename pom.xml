@@ -6,7 +6,7 @@
 
     <groupId>dev.tbm00</groupId>
     <artifactId>Data64</artifactId>
-    <version>0.0.6-beta</version>
+    <version>0.1.0-beta</version>
     <packaging>jar</packaging>
 
     <name>Data64</name>

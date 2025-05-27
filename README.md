@@ -47,7 +47,7 @@ Created by tbm00 for play.mc64.wtf.
 
 ## Config
 ```
-# Data64 v0.0.6-beta by @tbm00
+# Data64 v0.1.0-beta by @tbm00
 # https://github.com/tbm00/Data64
 
 enabled: true

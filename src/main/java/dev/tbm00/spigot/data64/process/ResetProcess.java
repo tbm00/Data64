@@ -46,12 +46,12 @@ public class ResetProcess {
      */
     private boolean canProcess() {
         if (player.hasPermission("mc.d64.newbie")) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior NEWBIE status!");
+            //javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior NEWBIE status!");
             return false;
         }
 
         if (player.hasPermission("mc.d64.processed")) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior PROCESSED status!");
+            //javaPlugin.sendMessage(sender, ChatColor.RED + "Reset process for " + player.getName() + " prevented by prior PROCESSED status!");
             //sendNotif(player);
             return false;
         }

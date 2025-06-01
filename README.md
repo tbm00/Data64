@@ -28,33 +28,10 @@ Created by tbm00 for play.mc64.wtf.
 
 
 ## Commands
-#### Player Commands
-- none
-
-#### Admin Commands
 - `/dataadmin reset <player>` Reset a player's economy, rank, and job levels
 - `/dataadmin transfer <playerFrom> <playerTo>` Transfer player's data to another account
 
 
 ## Permissions
-#### Player Permissions
-- none
-
-#### Admin Permissions
 - `data64.cmd.reset` Ability to use the /reset command *(default: op)*
 - `data64.cmd.transfer` Ability to use the /reset command *(default: op)*
-
-
-## Config
-```
-# Data64 v0.1.0-beta by @tbm00
-# https://github.com/tbm00/Data64
-
-enabled: true
-
-lang:
-  prefix: "&8[&fD64&8] &7"
-
-resetOnJoin:
-  enabled: false
-```

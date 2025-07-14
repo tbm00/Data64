@@ -1,6 +1,8 @@
 package dev.tbm00.spigot.data64.process;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
@@ -26,6 +28,8 @@ public class ResetProcess {
         boolean passedEcoDivide, passedRankHalve, passedJobsHalve;
 
         if (canProcess()) {
+            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " starting..!");
+
             passedEcoDivide = divideEco();
             passedRankHalve = halveRank();
             passedJobsHalve = halveJobs();
@@ -35,6 +39,7 @@ public class ResetProcess {
                         "passedEcoDivide: " + passedEcoDivide + " \n" +
                         "passedRankHalve: " + passedRankHalve + " \n" +
                         "passedJobsHalve: " + passedJobsHalve);
+            sendNotif(player);
         }
     }
 
@@ -56,6 +61,21 @@ public class ResetProcess {
             return false;
         }
 
+        Date firstDate = javaPlugin.logHook.getLogManager().getFirstJoin(player.getName());
+        if (firstDate == null || firstDate.equals(null)) {
+            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
+            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status! (0)");
+            return false;
+        }
+
+        LocalDate localUpdateDate = LocalDate.of(2025, 6, 1);
+        Date updateDate = Date.valueOf(localUpdateDate);
+        if (firstDate.after(updateDate)) {
+            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
+            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status! (1)");
+            return false;
+        }
+
         int current_play_ticks;
         try {
             current_play_ticks = player.getStatistic(Statistic.valueOf("PLAY_ONE_MINUTE"));
@@ -70,12 +90,10 @@ public class ResetProcess {
             }
         } if (current_play_ticks < 3600) {
             javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
-            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status!");
+            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status! (2)");
             return false;
         }
         
-        javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " starting..!");
-        sendNotif(player);
         return true;
     }
 

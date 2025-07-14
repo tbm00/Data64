@@ -1,5 +1,5 @@
 # Data64
-A spigot plugin that resets player data.
+A spigot plugin that manages player data in various ways.
 
 Created by tbm00 for play.mc64.wtf.
 

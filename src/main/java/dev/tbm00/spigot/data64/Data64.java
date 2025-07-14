@@ -25,6 +25,7 @@ import net.slipcor.pvpstats.PVPStats;
 import dev.tbm00.spigot.data64.hook.*;
 import dev.tbm00.spigot.data64.command.DataCommand;
 import dev.tbm00.spigot.data64.listener.PlayerConnection;
+import dev.tbm00.spigot.logger64.Logger64;
 
 public class Data64 extends JavaPlugin {
     private ConfigHandler configHandler;
@@ -37,6 +38,7 @@ public class Data64 extends JavaPlugin {
     public static BankPlus bankHook;
     public static PVPStats pvpHook;
     public static Economy ecoHook;
+    public Logger64 logHook;
 
     @Override
     public void onEnable() {
@@ -119,6 +121,12 @@ public class Data64 extends JavaPlugin {
 
         if (!setupPVPStats()) {
             getLogger().severe("PVPStats hook failed -- disabling plugin!");
+            disablePlugin();
+            return;
+        }
+
+        if (!setupLogger64()) {
+            getLogger().severe("Logger64 hook failed -- disabling plugin!");
             disablePlugin();
             return;
         }
@@ -260,6 +268,23 @@ public class Data64 extends JavaPlugin {
         else return false;
 
         log(ChatColor.GREEN, "PVPStats hooked.");
+        return true;
+    }
+
+    /**
+     * Attempts to hook into the Logger64 plugin.
+     *
+     * @return true if the hook was successful, false otherwise.
+     */
+    private boolean setupLogger64() {
+        if (!isPluginAvailable("Logger64")) return false;
+
+        Plugin logger64 = Bukkit.getPluginManager().getPlugin("Logger64");
+        if (logger64.isEnabled() && logger64 instanceof Logger64)
+            logHook = (Logger64) logger64;
+        else return false;
+
+        log(ChatColor.GREEN, "Logger64 hooked.");
         return true;
     }
 

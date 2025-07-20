@@ -42,7 +42,7 @@ public class DataCommand implements TabExecutor {
         String subCmd = args[0].toLowerCase();
         switch (subCmd) {
             case "reset":
-                return handleResetCmd(sender, args[1]);
+                return handleForceResetCmd(sender, args[1]);
             case "transfer":
                 return handleTransferCmd(sender, args[1], args[2]);
             case "dsreset":
@@ -58,7 +58,7 @@ public class DataCommand implements TabExecutor {
      * @param sender the command sender
      * @param name the player passed to the command
      */
-    private boolean handleResetCmd(CommandSender sender, String name) {
+    private boolean handleForceResetCmd(CommandSender sender, String name) {
         if (!hasPermission(sender, "data64.cmd.reset")) {
             javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
             return true;
@@ -70,7 +70,7 @@ public class DataCommand implements TabExecutor {
             return true;
         } 
 
-        new ResetProcess(javaPlugin, sender, target);
+        new ResetProcess(javaPlugin, sender, target, true);
         return true;
     }
 

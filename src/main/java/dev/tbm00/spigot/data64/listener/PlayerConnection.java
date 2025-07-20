@@ -23,7 +23,7 @@ public class PlayerConnection implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        new ResetProcess(javaPlugin, javaPlugin.getServer().getConsoleSender(), event.getPlayer());
+        new ResetProcess(javaPlugin, javaPlugin.getServer().getConsoleSender(), event.getPlayer(), false);
         if (event.getPlayer().hasPermission("group.one")) {
             javaPlugin.runCommand("lp user " + event.getPlayer().getName() + " permission unset group.default");
         }

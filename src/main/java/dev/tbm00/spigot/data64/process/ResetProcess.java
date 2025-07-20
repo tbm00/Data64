@@ -20,14 +20,14 @@ public class ResetProcess {
     private CommandSender sender;
     private Player player;
 
-    public ResetProcess(Data64 javaPlugin, CommandSender sender, Player player) {
+    public ResetProcess(Data64 javaPlugin, CommandSender sender, Player player, boolean force) {
         this.javaPlugin = javaPlugin;
         this.player = player;
         this.sender = sender;
 
         boolean passedEcoDivide, passedRankHalve, passedJobsHalve;
 
-        if (canProcess()) {
+        if (force || canProcess()) {
             javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " starting..!");
 
             passedEcoDivide = divideEco();

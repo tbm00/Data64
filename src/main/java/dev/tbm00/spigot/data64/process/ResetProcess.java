@@ -62,18 +62,14 @@ public class ResetProcess {
         }
 
         Date firstDate = javaPlugin.logHook.getLogManager().getFirstJoin(player.getName());
-        if (firstDate == null || firstDate.equals(null)) {
-            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
-            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status! (0)");
-            return false;
-        }
-
-        LocalDate localUpdateDate = LocalDate.of(2025, 6, 1);
-        Date updateDate = Date.valueOf(localUpdateDate);
-        if (firstDate.after(updateDate)) {
-            javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
-            javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status! (1)");
-            return false;
+        if (firstDate != null && !firstDate.equals(null)) {
+            LocalDate localUpdateDate = LocalDate.of(2025, 6, 1);
+            Date updateDate = Date.valueOf(localUpdateDate);
+            if (firstDate.after(updateDate)) {
+                javaPlugin.runCommand("lp user " + player.getName() + " permission set mc.d64.newbie true");
+                javaPlugin.sendMessage(sender, ChatColor.WHITE + "Reset process for " + player.getName() + " prevented by new NEWBIE status! (1)");
+                return false;
+            }
         }
 
         int current_play_ticks;

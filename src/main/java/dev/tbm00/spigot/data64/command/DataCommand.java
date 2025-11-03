@@ -15,15 +15,12 @@ import org.bukkit.ChatColor;
 
 import dev.tbm00.spigot.data64.Data64;
 import dev.tbm00.spigot.data64.process.*;
-import xzot1k.plugins.ds.DisplayShopsAPI;
 
 public class DataCommand implements TabExecutor {
     private final Data64 javaPlugin;
-    private DisplayShopsAPI dsHook;
 
-    public DataCommand(Data64 javaPlugin, DisplayShopsAPI dsHook) {
+    public DataCommand(Data64 javaPlugin) {
         this.javaPlugin = javaPlugin;
-        this.dsHook = dsHook;
     }
 
     /**
@@ -45,8 +42,6 @@ public class DataCommand implements TabExecutor {
                 return handleForceResetCmd(sender, args[1]);
             case "transfer":
                 return handleTransferCmd(sender, args[1], args[2]);
-            case "dsreset":
-                return handleDSResetCmd(sender);
             default:
                 return false;
         }
@@ -71,21 +66,6 @@ public class DataCommand implements TabExecutor {
         } 
 
         new ResetProcess(javaPlugin, sender, target, true);
-        return true;
-    }
-
-    /**
-     * Handles the displayshop reset command.
-     * 
-     * @param sender the command sender
-     */
-    private boolean handleDSResetCmd(CommandSender sender) {
-        if (!hasPermission(sender, "data64.cmd.dsreset")) {
-            javaPlugin.sendMessage(sender, ChatColor.RED + "No permission!");
-            return true;
-        }
-
-        new DSProcess(javaPlugin, dsHook);
         return true;
     }
 

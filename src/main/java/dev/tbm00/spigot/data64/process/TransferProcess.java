@@ -1,37 +1,38 @@
 package dev.tbm00.spigot.data64.process;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-import java.math.BigDecimal;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Location;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-import xzot1k.plugins.ds.api.objects.Shop;
-import com.olziedev.playerwarps.api.warp.Warp;
 import com.olziedev.playerwarps.api.player.WPlayer;
-import net.brcdev.gangs.gang.Gang;
+import com.olziedev.playerwarps.api.warp.Warp;
+
 import de.Keyle.MyPet.MyPetApi;
 import de.Keyle.MyPet.api.entity.StoredMyPet;
 import de.Keyle.MyPet.api.player.MyPetPlayer;
 import de.Keyle.MyPet.api.repository.RepositoryCallback;
+import dev.tbm00.papermc.playershops64.data.structure.Shop;
+import dev.tbm00.spigot.data64.Data64;
+import dev.tbm00.spigot.data64.hook.GDHook;
+import dev.tbm00.spigot.data64.hook.PetHook;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.pulsi_.bankplus.economy.BPEconomy;
 import me.pulsi_.bankplus.values.ConfigValues;
-
-import dev.tbm00.spigot.data64.Data64;
-import dev.tbm00.spigot.data64.hook.*;
+import net.brcdev.gangs.gang.Gang;
 
 public class TransferProcess {
     private Data64 javaPlugin;
@@ -59,7 +60,7 @@ public class TransferProcess {
         tPets();
         tPerms2();
         tPVPStats();
-        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, displayshops, claims, claim blocks, sethomes, warps, gang, pets, pvp stats, and job stats have been transferred from player " + playerA.getName());
+        javaPlugin.sendMessage(playerB, "&aYour rank/perms, inv, ec, pocket, bank, playershops64, claims, claim blocks, sethomes, warps, gang, pets, pvp stats, and job stats have been transferred from player " + playerA.getName());
         Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
             javaPlugin.runCommand("ban " + playerA.getName() + " &aYour account data has been transferred: &e" + playerA.getName() + " -> " + playerB.getName());
         }, 5L);
@@ -419,19 +420,24 @@ public class TransferProcess {
     }
 
     /**
-     * Transfers display shops from source player to target player.
+     * Transfers player shops from source player to target player.
      * 
      * @return true once transfer completes
      */
     private boolean tShops() {
-        ConcurrentHashMap<String, Shop> dsMap = Data64.dsHook.getManager().getShopMap();
+        Map<UUID, Shop> psMap = Data64.psHook.getShopHandler().getShopView();
 
         UUID uuidA = playerA.getUniqueId(), uuidB = playerB.getUniqueId();
+        String nameA = javaPlugin.getServer().getOfflinePlayer(uuidA).getName();
+        String nameB = javaPlugin.getServer().getOfflinePlayer(uuidB).getName();
 
         int i = 0;
-        for (Shop shop : dsMap.values()) {
-            if (shop.getOwnerUniqueId()!=null && shop.getOwnerUniqueId().equals(uuidA)) {
-                shop.setOwnerUniqueId(uuidB);
+        for (Shop shop : psMap.values()) {
+            if ((shop.getOwnerUuid()!=null && shop.getOwnerUuid().equals(uuidA)) || (shop.getOwnerName()!=null && shop.getOwnerName().equals(nameA))) {
+                shop.setOwnerUuid(uuidB);
+                shop.setOwnerName(nameB);
+
+                Data64.psHook.getShopHandler().upsertShopObject(shop);
                 ++i;
             }
         }

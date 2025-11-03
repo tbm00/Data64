@@ -15,21 +15,20 @@ import net.md_5.bungee.api.chat.TextComponent;
 import com.earth2me.essentials.Essentials;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
 import net.milkbowl.vault.economy.Economy;
-import xzot1k.plugins.ds.DisplayShops;
-import xzot1k.plugins.ds.DisplayShopsAPI;
 import net.brcdev.gangs.GangsPlugin;
 import de.Keyle.MyPet.MyPetPlugin;
 import me.pulsi_.bankplus.BankPlus;
 import net.slipcor.pvpstats.PVPStats;
 
 import dev.tbm00.spigot.data64.hook.*;
+import dev.tbm00.papermc.playershops64.PlayerShops64;
 import dev.tbm00.spigot.data64.command.DataCommand;
 import dev.tbm00.spigot.data64.listener.PlayerConnection;
 import dev.tbm00.spigot.logger64.Logger64;
 
 public class Data64 extends JavaPlugin {
     private ConfigHandler configHandler;
-    public static DisplayShopsAPI dsHook;
+    public static PlayerShops64 psHook;
     public static GDHook gdHook;
     public static Essentials essHook;
     public static PlayerWarpsAPI pwHook;
@@ -57,7 +56,7 @@ public class Data64 extends JavaPlugin {
             setupHooks();
 
             // Register Command
-            getCommand("dataadmin").setExecutor(new DataCommand(this, dsHook));
+            getCommand("dataadmin").setExecutor(new DataCommand(this));
 
             if (configHandler.isJoinResetEnabled()) {
                 // Register Listener
@@ -83,8 +82,8 @@ public class Data64 extends JavaPlugin {
             return;
         }
 
-        if (!setupDisplayShops()) {
-            getLogger().severe("DisplayShops hook failed -- disabling plugin!");
+        if (!setupPlayerShops64()) {
+            getLogger().severe("PlayerShops64 hook failed -- disabling plugin!");
             disablePlugin();
             return;
         }
@@ -159,16 +158,16 @@ public class Data64 extends JavaPlugin {
     }
 
     /**
-     * Attempts to hook into the DisplayShops plugin.
+     * Attempts to hook into the PlayerShops64 plugin.
      *
      * @return true if the hook was successful, false otherwise.
      */
-    private boolean setupDisplayShops() {
-        if (!isPluginAvailable("DisplayShops")) return false;
+    private boolean setupPlayerShops64() {
+        if (!isPluginAvailable("PlayerShops64")) return false;
 
-        Data64.dsHook = (DisplayShops) getServer().getPluginManager().getPlugin("DisplayShops");
-        
-        log(ChatColor.GREEN, "DisplayShops hooked.");
+        Data64.psHook = (PlayerShops64) getServer().getPluginManager().getPlugin("PlayerShops64");
+
+        log(ChatColor.GREEN, "PlayerShops64 hooked.");
         return true;
     }
 

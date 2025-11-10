@@ -571,25 +571,36 @@ public class TransferProcess {
             return true;
         }
 
-        final MyPetPlayer myPlayerA = PetHook.getPlayerManager().getMyPetPlayer(playerA),
-                            myPlayerB = PetHook.getPlayerManager().getMyPetPlayer(playerB);
-        
-        PetHook.storeCurrentPet(myPlayerA);
-        PetHook.storeCurrentPet(myPlayerB);
-
-        MyPetApi.getRepository().getMyPets(myPlayerA, new RepositoryCallback<List<StoredMyPet>>() {
-            @Override
-            public void callback(List<StoredMyPet> pets) {
-                for (StoredMyPet myPet : pets) {
-                    myPet.setOwner(myPlayerB);
-                    MyPetApi.getRepository().updateMyPet(myPet, null);
-                    MyPetApi.getRepository().savePet(myPet);
-                }
+        try {
+            MyPetPlayer myPlayerA = PetHook.getPlayerManager().getMyPetPlayer(playerA);
+            MyPetPlayer myPlayerB = MyPetApi.getPlayerManager().getMyPetPlayer(playerB);
+            if (myPlayerB == null) {
+                myPlayerB = MyPetApi.getPlayerManager().registerMyPetPlayer(playerB);
             }
-        });
+            
+            PetHook.storeCurrentPet(myPlayerA);
+            PetHook.storeCurrentPet(myPlayerB);
 
-        javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPets: true");
-        return true;
+            final MyPetPlayer newOwner = myPlayerB;
+
+            MyPetApi.getRepository().getMyPets(myPlayerA, new RepositoryCallback<List<StoredMyPet>>() {
+                @Override
+                public void callback(List<StoredMyPet> pets) {
+                    for (StoredMyPet myPet : pets) {
+                        myPet.setOwner(newOwner);
+                        MyPetApi.getRepository().updateMyPet(myPet, null);
+                        MyPetApi.getRepository().savePet(myPet);
+                    }
+                }
+            });
+
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPets: true");
+            return true;
+        } catch (Exception e) {
+            javaPlugin.sendMessage(sender, ChatColor.YELLOW + "tPets: ERROR");
+            e.printStackTrace();
+            return true;
+        }
     }
 
     /**

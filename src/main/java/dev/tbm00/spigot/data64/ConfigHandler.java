@@ -10,7 +10,6 @@ public class ConfigHandler {
 
     /**
      * Constructs a ConfigHandler instance.
-     * Loads configuration values for the plugin, including settings for PvP toggling and fixes.
      *
      * @param javaPlugin the main plugin instance
      */

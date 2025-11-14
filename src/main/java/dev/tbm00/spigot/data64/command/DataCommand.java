@@ -290,8 +290,6 @@ public class DataCommand implements TabExecutor {
                 list.add("findtrusts");
                 list.add("findclaims");
             }
-            if (hasPermission(sender, "data64.cmd.claims")) {
-            }
         } else if (args.length == 2) {
             if (hasPermission(sender, "data64.cmd.reset") || hasPermission(sender, "data64.cmd.transfer") || hasPermission(sender, "data64.cmd.claims")) {
                 Bukkit.getOnlinePlayers().forEach(player -> list.add(player.getName()));

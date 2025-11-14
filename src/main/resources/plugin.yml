@@ -15,3 +15,9 @@ permissions:
   data64.cmd.transfer:
     description: Ability to use the `/dataadmin transfer` command
     default: op
+  data64.cmd.trust:
+    description: Ability to use the `/dataadmin findtrusts` command
+    default: op
+  data64.cmd.tp-claim:
+    description: Ability to use the `/dataadmin tp-claim` command
+    default: op

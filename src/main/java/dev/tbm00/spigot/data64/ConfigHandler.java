@@ -7,6 +7,7 @@ public class ConfigHandler {
     private final Data64 javaPlugin;
     private String chatPrefix;
     private boolean joinResetEnabled = false;
+    private boolean claimMonitorEnabled = false;
 
     /**
      * Constructs a ConfigHandler instance.
@@ -18,6 +19,7 @@ public class ConfigHandler {
         try {
             loadLanguageSection();
             loadResetOnJoinSec();
+            loadClaimMonitorSec();
         } catch (Exception e) {
             javaPlugin.log(ChatColor.RED, "Caught exception loading config: " + e.getMessage());
         }
@@ -41,6 +43,15 @@ public class ConfigHandler {
             joinResetEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
     }
 
+    /**
+     * Loads the "claimMonitor" section of the configuration.
+     */
+    private void loadClaimMonitorSec() {
+        ConfigurationSection section = javaPlugin.getConfig().getConfigurationSection("claimMonitor");
+        if (section!=null)
+            claimMonitorEnabled = section.contains("enabled") ? section.getBoolean("enabled") : false;
+    }
+
 
     public String getChatPrefix() {
         return chatPrefix;
@@ -48,5 +59,9 @@ public class ConfigHandler {
 
     public boolean isJoinResetEnabled() {
         return joinResetEnabled;
+    }
+
+    public boolean isClaimMonitorEnabled() {
+        return claimMonitorEnabled;
     }
 }

@@ -5,6 +5,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -13,6 +16,9 @@ import org.bukkit.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import com.earth2me.essentials.Essentials;
+import com.griefdefender.api.GriefDefender;
+import com.griefdefender.api.claim.Claim;
+import com.griefdefender.lib.flowpowered.math.vector.Vector3i;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
 import net.milkbowl.vault.economy.Economy;
 import net.brcdev.gangs.GangsPlugin;
@@ -20,14 +26,18 @@ import de.Keyle.MyPet.MyPetPlugin;
 import me.pulsi_.bankplus.BankPlus;
 import net.slipcor.pvpstats.PVPStats;
 
-import dev.tbm00.spigot.data64.hook.*;
 import dev.tbm00.papermc.playershops64.PlayerShops64;
-import dev.tbm00.spigot.data64.command.DataCommand;
-import dev.tbm00.spigot.data64.listener.PlayerConnection;
 import dev.tbm00.spigot.logger64.Logger64;
 
+import dev.tbm00.spigot.data64.claimdata.EntryManager;
+import dev.tbm00.spigot.data64.claimdata.JSONHandler;
+import dev.tbm00.spigot.data64.command.DataCommand;
+import dev.tbm00.spigot.data64.listener.ClaimMonitor;
+import dev.tbm00.spigot.data64.listener.PlayerConnection;
+import dev.tbm00.spigot.data64.hook.*;
+
 public class Data64 extends JavaPlugin {
-    private ConfigHandler configHandler;
+    public ConfigHandler configHandler;
     public static PlayerShops64 psHook;
     public static GDHook gdHook;
     public static Essentials essHook;
@@ -37,7 +47,9 @@ public class Data64 extends JavaPlugin {
     public static BankPlus bankHook;
     public static PVPStats pvpHook;
     public static Economy ecoHook;
-    public Logger64 logHook;
+    public static Logger64 logHook;
+    public static JSONHandler jsonHandler;
+    public static EntryManager entryManager;
 
     @Override
     public void onEnable() {
@@ -52,16 +64,31 @@ public class Data64 extends JavaPlugin {
 
         if (getConfig().contains("enabled") && getConfig().getBoolean("enabled")) {
             configHandler = new ConfigHandler(this);
+
+            if (configHandler.isClaimMonitorEnabled()) {
+                try {
+                    jsonHandler = new JSONHandler(this);
+                    entryManager = new EntryManager(this, jsonHandler);
+                } catch (Exception e) {
+                    getLogger().severe("Failed to connect to JSON. Disabling plugin.");
+                    getServer().getPluginManager().disablePlugin(this);
+                    return;
+                }
+            }
                 
             setupHooks();
 
             // Register Command
             getCommand("dataadmin").setExecutor(new DataCommand(this));
 
+            // Register Listeners
             if (configHandler.isJoinResetEnabled()) {
-                // Register Listener
                 getServer().getPluginManager().registerEvents(new PlayerConnection(this), this);
             }
+            if (configHandler.isClaimMonitorEnabled()) {
+                getServer().getPluginManager().registerEvents(new ClaimMonitor(this), this);
+            }
+
         }
     }
 
@@ -310,7 +337,10 @@ public class Data64 extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+        if (entryManager != null) EntryManager.close();
+        
         log(ChatColor.RED, "Data64 disabled..!");
+        
     }
 
     /**
@@ -349,6 +379,18 @@ public class Data64 extends JavaPlugin {
             log(ChatColor.RED, "Caught exception running command " + command + ": " + e.getMessage());
             return false;
         }
+    }
+
+    public String getClaimLocationText(UUID claimUuid) {
+        Claim claim = GriefDefender.getCore().getClaim(claimUuid);
+        Vector3i claimVec1 = claim.getGreaterBoundaryCorner();
+        Vector3i claimVec2 = claim.getLesserBoundaryCorner();
+
+        return claim.getWorldName()+" @ "+((claimVec1.getX()+claimVec2.getX())/2)+", "+((claimVec1.getY()+claimVec2.getY())/2)+", "+((claimVec1.getZ()+claimVec2.getZ())/2);
+    }
+
+    public String getTpText(UUID claimUuid) {
+        return "Click to teleport to "+getClaimLocationText(claimUuid);
     }
 
     /**

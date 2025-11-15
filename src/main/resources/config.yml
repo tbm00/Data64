@@ -1,4 +1,4 @@
-# Data64 v0.1.9-beta by @tbm00
+# Data64 v0.1.10-beta by @tbm00
 # https://github.com/tbm00/Data64
 
 enabled: true
@@ -7,4 +7,7 @@ lang:
   prefix: "&8[&fD64&8] &7"
 
 resetOnJoin:
+  enabled: false
+
+claimMonitor:
   enabled: false

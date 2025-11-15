@@ -61,7 +61,7 @@ public class ResetProcess {
             return false;
         }
 
-        Date firstDate = javaPlugin.logHook.getLogManager().getFirstJoin(player.getName());
+        Date firstDate = Data64.logHook.getLogManager().getFirstJoin(player.getName());
         if (firstDate != null && !firstDate.equals(null)) {
             LocalDate localUpdateDate = LocalDate.of(2025, 6, 1);
             Date updateDate = Date.valueOf(localUpdateDate);

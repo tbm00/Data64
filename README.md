@@ -35,3 +35,4 @@ Created by tbm00 for play.mc64.wtf.
 ## Permissions
 - `data64.cmd.reset` Ability to use the /reset command *(default: op)*
 - `data64.cmd.transfer` Ability to use the /reset command *(default: op)*
+- `data64.cmd.claims` Ability to use the claim commands *(default: op)*
